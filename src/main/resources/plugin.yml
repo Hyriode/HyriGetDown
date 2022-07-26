@@ -1,0 +1,5 @@
+name: HyriGetDown
+main: fr.hyriode.getdown.HyriGetDown
+version: @version@
+depend: [Hyrame]
+authors: [AstFaster]

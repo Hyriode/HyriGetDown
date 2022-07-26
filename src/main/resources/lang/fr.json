@@ -1,0 +1,67 @@
+{
+  "game.description": "&fDescendez en bas de la carte tout en gagnant\n&fdes coins et en rammassant des bonus, afin\n&fd'acheter votre équipement pour élminer les\n&fautres joueurs.",
+
+  "scoreboard.time": "Temps: ",
+
+  "scoreboard.jump.map": "&fCarte: &3%map% &7%index%/%total%",
+  "scoreboard.jump.coins": "&fCoins: &b%coins%",
+  "scoreboard.jump.top": "&3Top 5:",
+  "scoreboard.jump.you": " &7(VOUS)",
+
+  "title.jump.end": "&6Vainqueur",
+  "title.jump.next-map": "&bCarte suivante",
+
+  "message.jump.end": "%player% &7est arrivé\n&aen bas&7!",
+  "message.jump.death": "%player% &7est mort.",
+
+  "scoreboard.death-match.kills": "&fKills: &b%kills%",
+  "scoreboard.death-match.players": "&fJoueurs: &b%players%",
+
+  "message.buy-phase.switching": "\n&7Phase de jump &aterminée&7! Achète désormais du stuff avec tes &6coins &7gagnés.\n \n",
+  "action-bar.buy-phase.time": "&b%seconds% &7seconde(s) avant le &cDeathMatch",
+
+  "gui.shop.name": "&3GetDown &8┃ &7Boutique",
+
+  "gui.shop.category.weapons": "&3Armes",
+  "gui.shop.category.leather-equipment": "&3Equipement en cuir",
+  "gui.shop.category.iron-equipment": "&3Equipement en fer",
+  "gui.shop.category.diamond-equipment": "&3Equipement en diamant",
+  "gui.shop.category.levels": "&3Niveaux",
+  "gui.shop.category.enchantment": "&3Enchantement",
+  "gui.shop.category.food": "&3Nourriture",
+  "gui.shop.category.potions": "&3Potions",
+
+  "item.shop.display": "&6Boutique",
+  "item.shop.lore": "&8▪ &7Prix: &3%price%\n\n&3Cliquer pour acheter",
+
+  "item.levels.name": "&fNiveau &b%level%",
+  "item.enchantment.name": "&fEnchantement niveau &b%level%",
+
+  "message.shop.not-enough-coins": "&cVous ne possédez pas assez de coins!",
+  "message.shop.not-enough-space": "&cVous n'avez pas assez de place dans votre inventaire!",
+
+  "difficulty.hard.display": "&cDIFFICILE",
+  "difficulty.medium.display": "&eMOYEN",
+  "difficulty.easy.display": "&aFACILE",
+
+  "bonus.action-bar.display": "&3%bonus% &8┃ &7%seconds% seconde(s)",
+
+  "bonus.rarity.mythic.name": "&dMYTHIQUE",
+  "bonus.rarity.legendary.name": "&6LEGENDAIRE",
+  "bonus.rarity.epic.name": "&5EPIC",
+  "bonus.rarity.rare.name": "&9RARE",
+  "bonus.rarity.common.name": "&8COMMUN",
+
+  "bonus.reduced-damage.name": "Dégats réduits",
+  "bonus.fire.name": "Feu",
+  "bonus.rocket.name": "Fusée",
+  "bonus.teleportation.name": "Téléportation",
+  "bonus.invisibility.name": "Invisibilité",
+  "bonus.blindness.name": "Vision aveuglée",
+  "bonus.regeneration.name": "Régénération",
+  "bonus.jump.name": "Sauts améliorés",
+  "bonus.slow.name": "Mouvements ralentis",
+  "bonus.extra-hearts.name": "Coeurs supplémentaires",
+  "bonus.resistance.name": "Résistance",
+  "bonus.nausea.name": "Nausée"
+}
