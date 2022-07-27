@@ -157,7 +157,7 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
     public void onEndReached(GDGamePlayer gamePlayer) {
         this.ended = true;
 
-        gamePlayer.addCoins(150);
+        gamePlayer.addCoins(this.config.getDifficulty().getCoinsReward());
 
         final Consumer<Consumer<Player>> players = consumer -> {
             for (Player player : Bukkit.getOnlinePlayers()) {

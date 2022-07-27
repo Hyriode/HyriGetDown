@@ -46,9 +46,34 @@ public class HyriGetDown extends JavaPlugin {
     private List<GDJumpWorld> jumpWorlds;
     private GDDeathMatchWorld deathMatchWorld;
 
-
     @Override
-    public void onLoad() {
+    public void onEnable() {
+        instance = this;
+
+        final ChatColor color = ChatColor.GOLD;
+        final ConsoleCommandSender sender = Bukkit.getConsoleSender();
+
+        sender.sendMessage(color + "   _____      _   _____                      ");
+        sender.sendMessage(color + "  / ____|    | | |  __ \\                     ");
+        sender.sendMessage(color + " | |  __  ___| |_| |  | | _____      ___ __  ");
+        sender.sendMessage(color + " | | |_ |/ _ \\ __| |  | |/ _ \\ \\ /\\ / / '_ \\ ");
+        sender.sendMessage(color + " | |__| |  __/ |_| |__| | (_) \\ V  V /| | | |");
+        sender.sendMessage(color + "  \\_____|\\___|\\__|_____/ \\___/ \\_/\\_/ |_| |_|");
+
+        log("Starting " + NAME + "...");
+
+        this.hyrame = HyrameLoader.load(new Provider());
+        this.config = HyriAPI.get().getConfig().isDevEnvironment() ? new DevConfig() : HyriAPI.get().getServer().getConfig(GDConfig.class);
+        this.game = new GDGame();
+
+        this.loadWorlds();
+
+        this.hyrame.getGameManager().registerGame(() -> this.game);
+
+        HyriAPI.get().getServer().setState(IHyriServer.State.READY);
+    }
+
+    private void loadWorlds() {
         this.jumpWorlds = new ArrayList<>();
 
         if (HyriAPI.get().getConfig().isDevEnvironment()) {
@@ -58,7 +83,6 @@ public class HyriGetDown extends JavaPlugin {
             this.deathMatchWorld = new GDDeathMatchWorld("deathmatch");
             return;
         }
-
 
         final IWorldManager worldManager = HyriAPI.get().getHystiaAPI().getWorldManager();
         final List<String> availableJumps = worldManager.getWorlds(ID, JUMPS_ID);
@@ -83,43 +107,15 @@ public class HyriGetDown extends JavaPlugin {
             final GDJumpWorld world = new GDJumpWorld(availableJumps.get(i));
 
             this.jumpWorlds.add(world);
-
-            world.load();
         }
 
         this.deathMatchWorld = new GDDeathMatchWorld(availableDeathMatches.get(0));
-        this.deathMatchWorld.load();
-    }
-
-    @Override
-    public void onEnable() {
-        instance = this;
-
-        final ChatColor color = ChatColor.GOLD;
-        final ConsoleCommandSender sender = Bukkit.getConsoleSender();
-
-        sender.sendMessage(color + "   _____      _   _____                      ");
-        sender.sendMessage(color + "  / ____|    | | |  __ \\                     ");
-        sender.sendMessage(color + " | |  __  ___| |_| |  | | _____      ___ __  ");
-        sender.sendMessage(color + " | | |_ |/ _ \\ __| |  | |/ _ \\ \\ /\\ / / '_ \\ ");
-        sender.sendMessage(color + " | |__| |  __/ |_| |__| | (_) \\ V  V /| | | |");
-        sender.sendMessage(color + "  \\_____|\\___|\\__|_____/ \\___/ \\_/\\_/ |_| |_|");
-
-        log("Starting " + NAME + "...");
-
-        this.hyrame = HyrameLoader.load(new Provider());
-        this.config = HyriAPI.get().getConfig().isDevEnvironment() ? new DevConfig() : HyriAPI.get().getServer().getConfig(GDConfig.class);
-        this.game = new GDGame();
 
         for (GDJumpWorld world : this.jumpWorlds) {
             world.load();
         }
 
         this.deathMatchWorld.load();
-
-        this.hyrame.getGameManager().registerGame(() -> this.game);
-
-        HyriAPI.get().getServer().setState(IHyriServer.State.READY);
     }
 
     @Override

@@ -8,18 +8,20 @@ import fr.hyriode.api.language.HyriLanguageMessage;
  */
 public enum GDJumpDifficulty {
 
-    HARD("hard", 0.01),
-    MEDIUM("medium", 0.016),
-    EASY("easy", 0.025);
+    HARD("hard", 0.01, 200),
+    MEDIUM("medium", 0.016, 250),
+    EASY("easy", 0.025, 300);
 
     private HyriLanguageMessage displayName;
 
     private final String name;
     private final double blocksPercentage;
+    private final int coinsReward;
 
-    GDJumpDifficulty(String name, double blocksPercentage) {
+    GDJumpDifficulty(String name, double blocksPercentage, int coinsReward) {
         this.name = name;
         this.blocksPercentage = blocksPercentage;
+        this.coinsReward = coinsReward;
     }
 
     public double getBlocksPercentage() {
@@ -28,6 +30,10 @@ public enum GDJumpDifficulty {
 
     public HyriLanguageMessage getDisplayName() {
         return this.displayName == null ? this.displayName = HyriLanguageMessage.get("difficulty." + this.name + ".display") : this.displayName;
+    }
+
+    public int getCoinsReward() {
+        return this.coinsReward;
     }
 
 }

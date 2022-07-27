@@ -46,10 +46,10 @@ public enum GDBonus {
 
             final Handler handler = new Handler();
 
-            addDurationBar(GDBonus.REDUCED_DAMAGE.getDisplayName(), player, 8);
+            addDurationBar(GDBonus.REDUCED_DAMAGE.getDisplayName(), player, 5);
 
             Bukkit.getServer().getPluginManager().registerEvents(handler, HyriGetDown.get());
-            Bukkit.getScheduler().runTaskLaterAsynchronously(HyriGetDown.get(), () -> HandlerList.unregisterAll(handler), 8 * 20L);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(HyriGetDown.get(), () -> HandlerList.unregisterAll(handler), 5 * 20L);
         }
 
         class Handler implements Listener {

@@ -12,10 +12,10 @@ public class LevelsGUI extends ShopGUI {
     public LevelsGUI(Player owner) {
         super(owner);
 
-        this.addItem(1, new LevelItem(1, 20));
-        this.addItem(3, new LevelItem(10, 140));
-        this.addItem(5, new LevelItem(20, 280));
-        this.addItem(7, new LevelItem(30, 410));
+        this.addItem(1, new LevelItem(1, 15));
+        this.addItem(3, new LevelItem(10, 110));
+        this.addItem(5, new LevelItem(20, 200));
+        this.addItem(7, new LevelItem(30, 350));
     }
 
 }
