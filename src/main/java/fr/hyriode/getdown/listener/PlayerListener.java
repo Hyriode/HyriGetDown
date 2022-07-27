@@ -134,19 +134,22 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
         }
 
         final Player player = (Player) entity;
-
         final GDGamePlayer gamePlayer = game.getPlayer(player);
-        final double damage = event.getFinalDamage();
-        final GDJumpWorld world = (GDJumpWorld) game.getCurrentWorld();
 
         if (gamePlayer == null) {
             return;
         }
 
+        final GDJumpWorld world = (GDJumpWorld) game.getCurrentWorld();
+
         if (world.isSwitchingMap()) {
             event.setCancelled(true);
             return;
         }
+
+        event.setDamage(event.getDamage() * 1.15);
+
+        final double damage = event.getFinalDamage();
 
         if (player.getHealth() - damage <= 0.0D) {
             if (!event.isCancelled()) {

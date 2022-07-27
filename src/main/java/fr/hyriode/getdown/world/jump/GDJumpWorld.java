@@ -65,32 +65,26 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
         final ThreadLocalRandom random = ThreadLocalRandom.current();
         final Cuboid cuboid = this.config.getArea().asArea(this.asBukkit()).toCuboid();
 
-        for (int x = cuboid.getLowerX(); x <= cuboid.getUpperX(); x++) {
-            for (int y = cuboid.getLowerY(); y <= cuboid.getUpperY(); y++) {
-                for (int z = cuboid.getLowerZ(); z <= cuboid.getUpperZ(); z++) {
-                    final Block block = this.bukkitWorld.getBlockAt(x, y, z);
-
-                    if (!this.checkAroundBlock(block) || block.getType() != Material.AIR || random.nextDouble() > this.config.getDifficulty().getBlocksPercentage()) {
-                        continue;
-                    }
-
-                    final GDJumpBlock jumpBlock = this.getRandomBlock();
-
-                    if (jumpBlock == null) {
-                        continue;
-                    }
-
-                    BlockTexture texture = jumpBlock.getTexture();
-                    if (texture == null) {
-                        texture = blocks.get(random.nextInt(blocks.size()));
-                    }
-
-                    block.setMetadata(GDJumpBlock.METADATA, new FixedMetadataValue(HyriGetDown.get(), jumpBlock));
-
-                    block.setType(texture.getMaterial());
-                    block.setData(texture.getData());
-                }
+        for (Block block : cuboid.getBlocks()) {
+            if (!this.checkAroundBlock(block) || block.getType() != Material.AIR || random.nextDouble() > this.config.getDifficulty().getBlocksPercentage()) {
+                continue;
             }
+
+            final GDJumpBlock jumpBlock = this.getRandomBlock();
+
+            if (jumpBlock == null) {
+                continue;
+            }
+
+            BlockTexture texture = jumpBlock.getTexture();
+            if (texture == null) {
+                texture = blocks.get(random.nextInt(blocks.size()));
+            }
+
+            block.setMetadata(GDJumpBlock.METADATA, new FixedMetadataValue(HyriGetDown.get(), jumpBlock));
+
+            block.setType(texture.getMaterial());
+            block.setData(texture.getData());
         }
     }
 

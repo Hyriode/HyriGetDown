@@ -13,6 +13,7 @@ public class GDWaitingRoom extends HyriWaitingRoom {
 
     public GDWaitingRoom(HyriGame<?> game) {
         super(game, Material.SEA_LANTERN, HyriGetDown.get().getConfiguration().getWaitingRoom());
+        this.clearBlocks = false;
     }
 
 }

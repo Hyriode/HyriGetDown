@@ -36,6 +36,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by AstFaster
@@ -240,12 +241,17 @@ public class GDGame extends HyriGame<GDGamePlayer> {
             }
 
             final PlayerInventory playerInventory = player.getInventory();
-
-            for (ItemStack content : playerInventory.getContents()) {
-                if(content != null) {
-                    player.getWorld().dropItemNaturally(player.getLocation(), content);
+            final Consumer<ItemStack[]> dropConsumer = itemStacks -> {
+                for (ItemStack itemStack : itemStacks) {
+                    if(itemStack != null) {
+                        player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+                    }
                 }
-            }
+            };
+
+            dropConsumer.accept(playerInventory.getContents());
+            dropConsumer.accept(playerInventory.getArmorContents());
+
             return false;
         }));
 
