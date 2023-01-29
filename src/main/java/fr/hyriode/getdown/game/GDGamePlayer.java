@@ -9,6 +9,7 @@ import fr.hyriode.getdown.language.GDMessage;
 import fr.hyriode.getdown.shop.item.ShopAccessorItem;
 import fr.hyriode.getdown.world.GDWorld;
 import fr.hyriode.getdown.world.jump.GDJumpWorld;
+import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.game.HyriGame;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
 import fr.hyriode.hyrame.scoreboard.HyriScoreboard;
@@ -29,8 +30,8 @@ public class GDGamePlayer extends HyriGamePlayer {
 
     private final GDGame game;
 
-    public GDGamePlayer(HyriGame<?> game, Player player) {
-        super(game, player);
+    public GDGamePlayer(Player player) {
+        super(player);
         this.game = HyriGetDown.get().getGame();
     }
 
@@ -41,7 +42,7 @@ public class GDGamePlayer extends HyriGamePlayer {
     public void onBuyStart() {
         new BuyScoreboard(this.player).show();
 
-        this.game.getHyrame().getItemManager().giveItem(this.player, 4, ShopAccessorItem.class);
+        IHyrame.get().getItemManager().giveItem(this.player, 4, ShopAccessorItem.class);
     }
 
     public void onDeathMatchStart() {
@@ -68,7 +69,8 @@ public class GDGamePlayer extends HyriGamePlayer {
             final GDJumpWorld jumpWorld = (GDJumpWorld) world;
             final int removedCoins = (int) (20 + damage / this.player.getMaxHealth() * ThreadLocalRandom.current().nextInt(10, 15));
 
-            this.game.sendMessageToAll(target -> GDMessage.MESSAGE_JUMP_DEATH.asString(target).replace("%player%", this.asHyriPlayer().getNameWithRank(true)));
+            this.game.getPlayers().forEach(target -> GDMessage.MESSAGE_JUMP_DEATH.asString(target.getPlayer())
+                    .replace("%player%", this.asHyriPlayer().getNameWithRank()));
 
             this.removeCoins(removedCoins);
 
@@ -82,7 +84,7 @@ public class GDGamePlayer extends HyriGamePlayer {
     private void onCoinsUpdated() {
         this.game.getCoinsObjective().getScore(this.player.getName()).setScore(this.coins);
 
-        final HyriScoreboard scoreboard = this.game.getHyrame().getScoreboardManager().getPlayerScoreboard(this.player);
+        final HyriScoreboard scoreboard = IHyrame.get().getScoreboardManager().getPlayerScoreboard(this.player);
 
         if (scoreboard instanceof GDScoreboard) {
             ((GDScoreboard) scoreboard).update();
@@ -90,7 +92,7 @@ public class GDGamePlayer extends HyriGamePlayer {
     }
 
     private void onKillsUpdated() {
-        for (DeathMatchScoreboard scoreboard : this.game.getHyrame().getScoreboardManager().getScoreboards(DeathMatchScoreboard.class)) {
+        for (DeathMatchScoreboard scoreboard : IHyrame.get().getScoreboardManager().getScoreboards(DeathMatchScoreboard.class)) {
             scoreboard.update();
         }
     }
@@ -131,7 +133,7 @@ public class GDGamePlayer extends HyriGamePlayer {
 
     @Override
     public String formatNameWithTeam() {
-        return this.asHyriPlayer().getNameWithRank(true);
+        return this.asHyriPlayer().getNameWithRank();
     }
 
 }

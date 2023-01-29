@@ -1,5 +1,6 @@
 package fr.hyriode.getdown.world.jump;
 
+import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.getdown.HyriGetDown;
 import fr.hyriode.getdown.game.GDGame;
 import fr.hyriode.getdown.game.GDGamePlayer;
@@ -13,10 +14,11 @@ import fr.hyriode.getdown.world.jump.block.coins.GDMegaCoinsBlock;
 import fr.hyriode.getdown.world.jump.block.coins.GDNormalCoinsBlock;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
 import fr.hyriode.hyrame.title.Title;
-import fr.hyriode.hyrame.utils.ListUtil;
 import fr.hyriode.hyrame.utils.PlayerUtil;
 import fr.hyriode.hyrame.utils.Symbols;
 import fr.hyriode.hyrame.utils.block.Cuboid;
+import fr.hyriode.hyrame.utils.list.ListReplacer;
+import fr.hyriode.hyrame.utils.list.ListUtil;
 import fr.hyriode.hyrame.utils.player.PlayerHeadAPI;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -181,16 +183,11 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
 
         players.accept(target -> {
             final Location location = target.getLocation();
-            final List<String> skinImageText = new ArrayList<>(Arrays.asList("", "", ""));
-
-            skinImageText.addAll(ListUtil.replace(GDMessage.MESSAGE_JUMP_END.asList(target), "%player%", gamePlayer.formatNameWithTeam()));
 
             target.playSound(location, Sound.FIREWORK_TWINKLE, 1.0F, 1.3F);
             target.playSound(location, Sound.LEVEL_UP, 1.0F, 1.0F);
-
-            PlayerHeadAPI.createImageMessage(gamePlayer.getPlayer(), 8, Symbols.FILLED_RECTANGLE.charAt(0))
-                    .appendText(skinImageText.toArray(new String[0]))
-                    .send(target);
+            target.sendMessage(ChatColor.AQUA + HyriLanguageMessage.get("message.player.get-down").getValue(target.getUniqueId())
+                    .replace("%player%", gamePlayer.getPlayer().getName()));
         });
 
         new BukkitRunnable() {
@@ -204,7 +201,7 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
 
                     switchingMap = true;
 
-                    final String playerName = gamePlayer.asHyriPlayer().getNameWithRank(true);
+                    final String playerName = gamePlayer.asHyriPlayer().getNameWithRank();
 
                     players.accept(target -> Title.sendTitle(target, GDMessage.TITLE_JUMP_END.asString(target), playerName, 15, 60, 15));
 

@@ -80,16 +80,16 @@ public class GDGame extends HyriGame<GDGamePlayer> {
     }
 
     @Override
-    public void handleLogin(Player p) {
-        super.handleLogin(p);
+    public void handleLogin(Player player) {
+        super.handleLogin(player);
 
-        final GDGamePlayer gamePlayer = this.getPlayer(p);
+        final GDGamePlayer gamePlayer = this.getPlayer(player);
 
         if (gamePlayer == null) {
             return;
         }
 
-        final HyriGameTeam team = new HyriGameTeam(this, p.getName(), null, null, 1);
+        final HyriGameTeam team = new HyriGameTeam(player.getName(), null, null, 1);
 
         this.registerTeam(team);
 
@@ -176,7 +176,7 @@ public class GDGame extends HyriGame<GDGamePlayer> {
             scoreboard.hide();
         }
 
-        this.sendMessageToAll(GDMessage.MESSAGE_BUY_PHASE_NAME::asString);
+        this.getPlayers().forEach(player -> player.getPlayer().sendMessage(GDMessage.MESSAGE_BUY_PHASE_NAME.asLang().getValue(player.getUniqueId())));
 
         for (GDGamePlayer gamePlayer : this.players) {
             gamePlayer.onBuyStart();

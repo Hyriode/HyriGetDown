@@ -30,7 +30,7 @@ public abstract class GDWorld<T extends GDWorldConfig> {
         this.name = name;
 
         if (HyriAPI.get().getConfig().isDevEnvironment()) {
-            this.config = this.type == Type.JUMP ? configClass.cast(new DevJumpConfig(GDJumpDifficulty.values()[ThreadLocalRandom.current().nextInt(GDJumpDifficulty.values().length)])) : configClass.cast(new DevDeathMatchConfig());
+            this.config = (this.type == Type.JUMP) ? configClass.cast(new DevJumpConfig(GDJumpDifficulty.values()[ThreadLocalRandom.current().nextInt(GDJumpDifficulty.values().length)])) : configClass.cast(new DevDeathMatchConfig());
         } else {
             this.config = HyriAPI.get().getHystiaAPI().getConfigManager().getConfig(configClass, HyriGetDown.ID, this.type.getWorldsId(), this.name);
         }

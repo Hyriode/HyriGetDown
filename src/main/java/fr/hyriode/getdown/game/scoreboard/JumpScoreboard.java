@@ -50,7 +50,7 @@ public class JumpScoreboard extends GDScoreboard {
         for (int i = 0; i < 5; i++) {
             final GDGamePlayer gamePlayer = bestPlayers.size() > i ? bestPlayers.get(i) : null;
 
-            this.setLine(8 + i, Symbols.HYPHEN_BULLET + " " + (gamePlayer == null || !gamePlayer.isOnline() ? ChatColor.values()[i] + "" + ChatColor.RESET + ChatColor.GRAY + "**********" : gamePlayer.asHyriPlayer().getNameWithRank(true) + (gamePlayer.getUniqueId().equals(this.player.getUniqueId()) ? GDMessage.SCOREBOARD_JUMP_YOU.asString(this.player) : "")));
+            this.setLine(8 + i, Symbols.HYPHEN_BULLET + " " + (gamePlayer == null || !gamePlayer.isOnline() ? ChatColor.values()[i] + "" + ChatColor.RESET + ChatColor.GRAY + "**********" : gamePlayer.asHyriPlayer().getNameWithRank() + (gamePlayer.getUniqueId().equals(this.player.getUniqueId()) ? GDMessage.SCOREBOARD_JUMP_YOU.asString(this.player) : "")));
         }
     }
 

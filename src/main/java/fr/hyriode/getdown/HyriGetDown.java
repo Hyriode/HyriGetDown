@@ -10,6 +10,7 @@ import fr.hyriode.getdown.world.deathmatch.GDDeathMatchWorld;
 import fr.hyriode.getdown.world.jump.GDJumpConfig;
 import fr.hyriode.getdown.world.GDWorld;
 import fr.hyriode.getdown.world.jump.GDJumpWorld;
+import fr.hyriode.hyggdrasil.api.server.HyggServer;
 import fr.hyriode.hyrame.HyrameLoader;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.plugin.IPluginProvider;
@@ -70,7 +71,7 @@ public class HyriGetDown extends JavaPlugin {
 
         this.hyrame.getGameManager().registerGame(() -> this.game);
 
-        HyriAPI.get().getServer().setState(IHyriServer.State.READY);
+        HyriAPI.get().getServer().setState(HyggServer.State.READY);
     }
 
     private void loadWorlds() {
@@ -81,35 +82,34 @@ public class HyriGetDown extends JavaPlugin {
             this.jumpWorlds.add(new GDJumpWorld("second"));
             this.jumpWorlds.add(new GDJumpWorld("third"));
             this.deathMatchWorld = new GDDeathMatchWorld("deathmatch");
-            return;
+        } else {
+            final IWorldManager worldManager = HyriAPI.get().getHystiaAPI().getWorldManager();
+            final List<String> availableJumps = worldManager.getWorlds(ID, JUMPS_ID);
+            final List<String> availableDeathMatches = worldManager.getWorlds(ID, DEATH_MATCHES_ID);
+
+            if (availableJumps.size() < 3) {
+                log(Level.SEVERE, "There are not enough maps for jumps (3 minimum)!");
+                Bukkit.shutdown();
+                return;
+            }
+
+            if (availableDeathMatches.size() < 1) {
+                log(Level.SEVERE, "There are not enough maps for death match (1 minimum)!");
+                Bukkit.shutdown();
+                return;
+            }
+
+            Collections.shuffle(availableJumps);
+            Collections.shuffle(availableDeathMatches);
+
+            for (int i = 0; i < 3; i++) {
+                final GDJumpWorld world = new GDJumpWorld(availableJumps.get(i));
+
+                this.jumpWorlds.add(world);
+            }
+
+            this.deathMatchWorld = new GDDeathMatchWorld(availableDeathMatches.get(0));
         }
-
-        final IWorldManager worldManager = HyriAPI.get().getHystiaAPI().getWorldManager();
-        final List<String> availableJumps = worldManager.getWorlds(ID, JUMPS_ID);
-        final List<String> availableDeathMatches = worldManager.getWorlds(ID, DEATH_MATCHES_ID);
-
-        if (availableJumps.size() < 3) {
-            log(Level.SEVERE, "There are not enough maps for jumps (3 minimum)!");
-            Bukkit.shutdown();
-            return;
-        }
-
-        if (availableDeathMatches.size() < 1) {
-            log(Level.SEVERE, "There are not enough maps for death match (1 minimum)!");
-            Bukkit.shutdown();
-            return;
-        }
-
-        Collections.shuffle(availableJumps);
-        Collections.shuffle(availableDeathMatches);
-
-        for (int i = 0; i < 3; i++) {
-            final GDJumpWorld world = new GDJumpWorld(availableJumps.get(i));
-
-            this.jumpWorlds.add(world);
-        }
-
-        this.deathMatchWorld = new GDDeathMatchWorld(availableDeathMatches.get(0));
 
         for (GDJumpWorld world : this.jumpWorlds) {
             world.load();
