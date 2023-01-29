@@ -12,9 +12,10 @@ public class EnchantGUI extends ShopGUI {
     public EnchantGUI(Player owner) {
         super(owner);
 
-        this.addItem(2, new EnchantItem(10));
-        this.addItem(4, new EnchantItem(20));
-        this.addItem(6, new EnchantItem(30));
+        this.addItem(22, new EnchantItem(1));
+        this.addItem(23, new EnchantItem(10));
+        this.addItem(31, new EnchantItem(20));
+        this.addItem(32, new EnchantItem(30));
     }
 
 }

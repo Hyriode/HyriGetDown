@@ -5,7 +5,8 @@ import fr.hyriode.getdown.game.GDGamePlayer;
 import fr.hyriode.getdown.language.GDMessage;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.hyrame.utils.ItemUtil;
-import fr.hyriode.hyrame.utils.ListUtil;
+import fr.hyriode.hyrame.utils.list.ListReplacer;
+import fr.hyriode.hyrame.utils.list.ListUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -49,7 +50,7 @@ public class ShopItem {
 
     public ItemStack createItem(Player player) {
         return new ItemBuilder(this.itemStack.clone())
-                .withLore(ListUtil.replace(GDMessage.ITEM_SHOP_LORE.asList(player), "%price%", String.valueOf(this.price)))
+                .withLore(ListReplacer.replace(GDMessage.ITEM_SHOP_LORE.asList(player), "%price%", String.valueOf(this.price)).list())
                 .withAllItemFlags()
                 .build();
     }

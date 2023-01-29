@@ -18,13 +18,13 @@
   "scoreboard.death-match.players": "&fPlayers: &b%players%",
 
   "message.buy-phase.switching": "\n&7Jump phase &acompleted&7! Now, buy stuff with your earned &6coins&7.\n \n",
+  "message.player.get-down": "%player% went down, switching area...",
   "action-bar.buy-phase.time": "&b%seconds% &7second(s) before the &cDeathMatch",
 
   "gui.shop.name": "&3GetDown &8┃ &7Shop",
 
   "gui.shop.category.weapons": "&3Weapons",
-  "gui.shop.category.leather-equipment": "&3Leather equipment",
-  "gui.shop.category.iron-equipment": "&3Iron equipment",
+  "gui.shop.category.armor": "&3Armors",
   "gui.shop.category.diamond-equipment": "&3Diamond equipment",
   "gui.shop.category.levels": "&3Levels",
   "gui.shop.category.enchantment": "&3Enchantment",

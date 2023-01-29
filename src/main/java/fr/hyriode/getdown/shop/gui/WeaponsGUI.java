@@ -3,6 +3,7 @@ package fr.hyriode.getdown.shop.gui;
 import fr.hyriode.getdown.shop.ShopItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Created by AstFaster
@@ -13,12 +14,13 @@ public class WeaponsGUI extends ShopGUI {
     public WeaponsGUI(Player owner) {
         super(owner);
 
-        this.addItem(0, new ShopItem(Material.WOOD_SWORD, 50));
-        this.addItem(1, new ShopItem(Material.STONE_SWORD, 100));
-        this.addItem(2, new ShopItem(Material.IRON_SWORD, 200));
-        this.addItem(3, new ShopItem(Material.FISHING_ROD, 200));
-        this.addItem(4, new ShopItem(Material.BOW, 100));
-        this.addItem(5, new ShopItem(Material.ARROW, 5));
+        this.addItem(21, new ShopItem(Material.WOOD_SWORD, 50));
+        this.addItem(22, new ShopItem(Material.STONE_SWORD, 100));
+        this.addItem(23, new ShopItem(Material.IRON_SWORD, 200));
+        this.addItem(24, new ShopItem(Material.DIAMOND_SWORD, 300));
+        this.addItem(30, new ShopItem(Material.FISHING_ROD, 250));
+        this.addItem(31, new ShopItem(Material.BOW, 100));
+        this.addItem(32, new ShopItem(new ItemStack(Material.ARROW, 3), 5));
     }
 
 }

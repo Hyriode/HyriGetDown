@@ -18,13 +18,13 @@
   "scoreboard.death-match.players": "&fJoueurs: &b%players%",
 
   "message.buy-phase.switching": "\n&7Phase de jump &aterminée&7! Achète désormais du stuff avec tes &6coins &7gagnés.\n \n",
+  "message.player.get-down": "%player% est arrivé en bas, changement d'arène en cours....",
   "action-bar.buy-phase.time": "&b%seconds% &7seconde(s) avant le &cDeathMatch",
 
   "gui.shop.name": "&3GetDown &8┃ &7Boutique",
 
   "gui.shop.category.weapons": "&3Armes",
-  "gui.shop.category.leather-equipment": "&3Equipement en cuir",
-  "gui.shop.category.iron-equipment": "&3Equipement en fer",
+  "gui.shop.category.armor": "&3Armures",
   "gui.shop.category.diamond-equipment": "&3Equipement en diamant",
   "gui.shop.category.levels": "&3Niveaux",
   "gui.shop.category.enchantment": "&3Enchantement",

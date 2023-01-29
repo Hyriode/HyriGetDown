@@ -39,8 +39,7 @@ public enum GDMessage {
     GUI_SHOP_NAME("gui.shop.name"),
 
     GUI_SHOP_CATEGORY_WEAPONS_NAME("gui.shop.category.weapons"),
-    GUI_SHOP_CATEGORY_LEATHER_EQUIPMENT_NAME("gui.shop.category.leather-equipment"),
-    GUI_SHOP_CATEGORY_IRON_EQUIPMENT_NAME("gui.shop.category.iron-equipment"),
+    GUI_SHOP_CATEGORY_ARMOR_NAME("gui.shop.category.armor"),
     GUI_SHOP_CATEGORY_DIAMOND_EQUIPMENT_NAME("gui.shop.category.diamond-equipment"),
     GUI_SHOP_CATEGORY_LEVELS_NAME("gui.shop.category.levels"),
     GUI_SHOP_CATEGORY_ENCHANTMENT_NAME("gui.shop.category.enchantment"),

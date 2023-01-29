@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class ShopAccessorItem extends HyriItem<HyriGetDown> {
 
     public ShopAccessorItem(HyriGetDown plugin) {
-        super(plugin, "shop", () -> HyriLanguageMessage.get("item.shop.display"), ArrayList::new, Material.GOLD_INGOT);
+        super(plugin, "shop", () -> HyriLanguageMessage.get("item.shop.display"), () -> HyriLanguageMessage.get("item.shop.lore"), Material.GOLD_INGOT);
     }
 
     @Override

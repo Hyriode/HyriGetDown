@@ -31,13 +31,11 @@ public abstract class ShopGUI extends HyriInventory {
             this.categories = new ArrayList<>();
 
             this.registerCategory(new Category(Material.GOLD_SWORD, GDMessage.GUI_SHOP_CATEGORY_WEAPONS_NAME, 0, WeaponsGUI.class));
-            this.registerCategory(new Category(Material.LEATHER_CHESTPLATE, GDMessage.GUI_SHOP_CATEGORY_LEATHER_EQUIPMENT_NAME, 1, LeatherEquipmentGUI.class));
-            this.registerCategory(new Category(Material.IRON_CHESTPLATE, GDMessage.GUI_SHOP_CATEGORY_IRON_EQUIPMENT_NAME, 2, IronEquipmentGUI.class));
-            this.registerCategory(new Category(Material.DIAMOND_CHESTPLATE, GDMessage.GUI_SHOP_CATEGORY_DIAMOND_EQUIPMENT_NAME, 3, DiamondEquipmentGUI.class));
-            this.registerCategory(new Category(Material.EXP_BOTTLE, GDMessage.GUI_SHOP_CATEGORY_LEVELS_NAME, 4, LevelsGUI.class));
-            this.registerCategory(new Category(Material.ENCHANTMENT_TABLE, GDMessage.GUI_SHOP_CATEGORY_ENCHANTMENT_NAME, 5, EnchantGUI.class));
-            this.registerCategory(new Category(Material.COOKED_BEEF, GDMessage.GUI_SHOP_CATEGORY_FOOD_NAME, 6, FoodGUI.class));
-            this.registerCategory(new Category(Material.POTION, GDMessage.GUI_SHOP_CATEGORY_POTIONS_NAME, 7, PotionsGUI.class));
+            this.registerCategory(new Category(Material.IRON_CHESTPLATE, GDMessage.GUI_SHOP_CATEGORY_ARMOR_NAME, 18, ArmorGUI.class));
+            this.registerCategory(new Category(Material.EXP_BOTTLE, GDMessage.GUI_SHOP_CATEGORY_LEVELS_NAME, 27, LevelsGUI.class));
+            this.registerCategory(new Category(Material.ENCHANTMENT_TABLE, GDMessage.GUI_SHOP_CATEGORY_ENCHANTMENT_NAME, 36, EnchantGUI.class));
+            this.registerCategory(new Category(Material.COOKED_BEEF, GDMessage.GUI_SHOP_CATEGORY_FOOD_NAME, 45, FoodGUI.class));
+            this.registerCategory(new Category(Material.POTION, GDMessage.GUI_SHOP_CATEGORY_POTIONS_NAME, 54, PotionsGUI.class));
         }
 
         public void registerCategory(Category category) {
@@ -64,9 +62,6 @@ public abstract class ShopGUI extends HyriInventory {
         private final Class<? extends ShopGUI> guiClass;
 
         public Category(ItemStack item, GDMessage name, int slot, Class<? extends ShopGUI> guiClass) {
-            if (slot >= 9) {
-                throw new IllegalArgumentException("Slot must be less than 9!");
-            }
             this.item = item;
             this.name = name;
             this.slot = slot;
@@ -96,7 +91,7 @@ public abstract class ShopGUI extends HyriInventory {
     }
 
     public ShopGUI(Player owner) {
-        super(owner, name(owner, "gui.shop.name"), 2 * 9);
+        super(owner, name(owner, "gui.shop.name"), 6 * 9);
 
         for (Category category : Manager.get().getCategories()) {
             this.setItem(category.getSlot(), new ItemBuilder(category.getItem())
@@ -112,7 +107,7 @@ public abstract class ShopGUI extends HyriInventory {
     }
 
     public void addItem(int slot, ShopItem shopItem) {
-        this.setItem(9 + slot, shopItem.createItem(this.owner), event -> shopItem.buy(this.owner));
+        this.setItem(slot, shopItem.createItem(this.owner), event -> shopItem.buy(this.owner));
     }
 
     private void openSubGUI(Class<? extends ShopGUI> guiClass) {
