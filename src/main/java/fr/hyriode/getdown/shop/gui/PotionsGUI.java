@@ -17,10 +17,10 @@ public class PotionsGUI extends ShopGUI {
         this.addItem(21, new PotionItem(new Potion(PotionType.INSTANT_HEAL), 20));
         this.addItem(22, new PotionItem(new Potion(PotionType.INSTANT_HEAL, 2), 40));
         this.addItem(23, new PotionItem(new Potion(PotionType.INSTANT_HEAL).splash(), 50));
-        this.addItem(23, new PotionItem(new Potion(PotionType.INSTANT_HEAL, 2).splash(), 100));
-        this.addItem(2, new PotionItem(new Potion(PotionType.SPEED), 30));
-        this.addItem(3, new PotionItem(new Potion(PotionType.FIRE_RESISTANCE), 100));
-        this.addItem(4, new PotionItem(new Potion(PotionType.INSTANT_DAMAGE).splash(), 125));
+        this.addItem(24, new PotionItem(new Potion(PotionType.INSTANT_HEAL, 2).splash(), 100));
+        this.addItem(30, new PotionItem(new Potion(PotionType.SPEED), 30));
+        this.addItem(31, new PotionItem(new Potion(PotionType.FIRE_RESISTANCE), 100));
+        this.addItem(32, new PotionItem(new Potion(PotionType.INSTANT_DAMAGE).splash(), 125));
     }
 
 }

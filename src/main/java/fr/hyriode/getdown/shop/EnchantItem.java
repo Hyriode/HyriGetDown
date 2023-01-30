@@ -19,7 +19,7 @@ public class EnchantItem extends ShopItem {
     private final int level;
 
     public EnchantItem(int level) {
-        super(Material.ENCHANTED_BOOK, -1);
+        super(new ItemStack(Material.ENCHANTMENT_TABLE, level), -1);
         this.level = level;
     }
 

@@ -22,6 +22,7 @@ import fr.hyriode.hyrame.title.Title;
 import fr.hyriode.hyrame.utils.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -243,7 +244,7 @@ public class GDGame extends HyriGame<GDGamePlayer> {
             final PlayerInventory playerInventory = player.getInventory();
             final Consumer<ItemStack[]> dropConsumer = itemStacks -> {
                 for (ItemStack itemStack : itemStacks) {
-                    if(itemStack != null) {
+                    if(itemStack != null && !itemStack.getType().equals(Material.AIR)) {
                         player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
                     }
                 }

@@ -31,11 +31,11 @@ public abstract class ShopGUI extends HyriInventory {
             this.categories = new ArrayList<>();
 
             this.registerCategory(new Category(Material.GOLD_SWORD, GDMessage.GUI_SHOP_CATEGORY_WEAPONS_NAME, 0, WeaponsGUI.class));
-            this.registerCategory(new Category(Material.IRON_CHESTPLATE, GDMessage.GUI_SHOP_CATEGORY_ARMOR_NAME, 18, ArmorGUI.class));
-            this.registerCategory(new Category(Material.EXP_BOTTLE, GDMessage.GUI_SHOP_CATEGORY_LEVELS_NAME, 27, LevelsGUI.class));
-            this.registerCategory(new Category(Material.ENCHANTMENT_TABLE, GDMessage.GUI_SHOP_CATEGORY_ENCHANTMENT_NAME, 36, EnchantGUI.class));
-            this.registerCategory(new Category(Material.COOKED_BEEF, GDMessage.GUI_SHOP_CATEGORY_FOOD_NAME, 45, FoodGUI.class));
-            this.registerCategory(new Category(Material.POTION, GDMessage.GUI_SHOP_CATEGORY_POTIONS_NAME, 54, PotionsGUI.class));
+            this.registerCategory(new Category(Material.IRON_CHESTPLATE, GDMessage.GUI_SHOP_CATEGORY_ARMOR_NAME, 9, ArmorGUI.class));
+            this.registerCategory(new Category(Material.EXP_BOTTLE, GDMessage.GUI_SHOP_CATEGORY_LEVELS_NAME, 18, LevelsGUI.class));
+            this.registerCategory(new Category(Material.ENCHANTMENT_TABLE, GDMessage.GUI_SHOP_CATEGORY_ENCHANTMENT_NAME, 27, EnchantGUI.class));
+            this.registerCategory(new Category(Material.COOKED_BEEF, GDMessage.GUI_SHOP_CATEGORY_FOOD_NAME, 36, FoodGUI.class));
+            this.registerCategory(new Category(Material.POTION, GDMessage.GUI_SHOP_CATEGORY_POTIONS_NAME, 45, PotionsGUI.class));
         }
 
         public void registerCategory(Category category) {
@@ -104,6 +104,9 @@ public abstract class ShopGUI extends HyriInventory {
                         this.openSubGUI(category.getGuiClass());
                     });
         }
+
+        this.setVerticalLine(1, 46, new ItemBuilder(Material.STAINED_GLASS_PANE, 1,9).withName(" ").build());
+        this.setVerticalLine(8, 53, new ItemBuilder(Material.STAINED_GLASS_PANE, 1,9).withName(" ").build());
     }
 
     public void addItem(int slot, ShopItem shopItem) {
