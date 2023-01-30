@@ -17,6 +17,9 @@ import fr.hyriode.hyrame.title.Title;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -29,10 +32,12 @@ public class GDGamePlayer extends HyriGamePlayer {
     private int kills;
 
     private final GDGame game;
+    private final List<Integer> achievements;
 
     public GDGamePlayer(Player player) {
         super(player);
         this.game = HyriGetDown.get().getGame();
+        this.achievements = new ArrayList<>(Arrays.asList(GDAchievement.NO_DEATHS.getId(), GDAchievement.NO_DAMAGES.getId()));
     }
 
     public void onJumpsStart() {
@@ -136,4 +141,7 @@ public class GDGamePlayer extends HyriGamePlayer {
         return this.asHyriPlayer().getNameWithRank();
     }
 
+    public List<Integer> getAchievements() {
+        return this.achievements;
+    }
 }

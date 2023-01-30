@@ -177,7 +177,18 @@ public class GDGame extends HyriGame<GDGamePlayer> {
             scoreboard.hide();
         }
 
-        this.getPlayers().forEach(player -> player.getPlayer().sendMessage(GDMessage.MESSAGE_BUY_PHASE_NAME.asLang().getValue(player.getUniqueId())));
+        this.getPlayers().forEach(player -> {
+            player.getPlayer().sendMessage(GDMessage.MESSAGE_BUY_PHASE_NAME.asLang().getValue(player.getUniqueId()));
+            Title.sendTitle(player.getPlayer(), ChatColor.DARK_AQUA + "Phase d’achat", ChatColor.AQUA + "Préparer votre équipement", 5, 40, 5);
+
+            for (Integer achievementId : player.getAchievements()) {
+                final GDAchievement achievement = GDAchievement.getById(achievementId);
+
+                player.getPlayer().sendMessage(ChatColor.AQUA + HyriLanguageMessage.get(achievement.getKey()).getValue(player.getUniqueId())
+                                .replace("%coins%", ChatColor.DARK_AQUA + "" + achievement.getCoins() + "" + ChatColor.AQUA));
+                player.addCoins(achievement.getCoins());
+            }
+        });
 
         for (GDGamePlayer gamePlayer : this.players) {
             gamePlayer.onBuyStart();
@@ -185,7 +196,7 @@ public class GDGame extends HyriGame<GDGamePlayer> {
 
         new BukkitRunnable() {
 
-            private int index = 90;
+            private int index = 150;
 
             @Override
             public void run() {

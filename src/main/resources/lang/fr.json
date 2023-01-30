@@ -63,5 +63,8 @@
   "bonus.slow.name": "Mouvements ralentis",
   "bonus.extra-hearts.name": "Coeurs supplémentaires",
   "bonus.resistance.name": "Résistance",
-  "bonus.nausea.name": "Nausée"
+  "bonus.nausea.name": "Nausée",
+
+  "achievement.no-deaths.name": "Vous n'êtes pas mort de la partie, + %coins% coins",
+  "achievement.no-damages.name": "Vous n'avez pris aucun dégat cette partie, + %coins% coins"
 }

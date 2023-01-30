@@ -63,5 +63,8 @@
   "bonus.slow.name": "Slowed movements",
   "bonus.extra-hearts.name": "Extra hearts",
   "bonus.resistance.name": "Resistance",
-  "bonus.nausea.name": "Nausea"
+  "bonus.nausea.name": "Nausea",
+
+  "achievement.no-deaths.name": "You did not die this game, + %coins% coins",
+  "achievement.no-damages.name": "You did not take any damages this game, + %coins% coins"
 }

@@ -4,6 +4,7 @@ import fr.hyriode.api.HyriAPI;
 import fr.hyriode.api.event.HyriEventHandler;
 import fr.hyriode.api.event.HyriEventPriority;
 import fr.hyriode.getdown.HyriGetDown;
+import fr.hyriode.getdown.game.GDAchievement;
 import fr.hyriode.getdown.game.GDGame;
 import fr.hyriode.getdown.game.GDGamePlayer;
 import fr.hyriode.getdown.game.GDPhase;
@@ -151,10 +152,13 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
 
         final double damage = event.getFinalDamage();
 
+        gamePlayer.getAchievements().remove((Integer) GDAchievement.NO_DAMAGES.getId());
+
         if (player.getHealth() - damage <= 0.0D) {
             if (!event.isCancelled()) {
                 event.setDamage(0.0D);
                 event.setCancelled(true);
+                gamePlayer.getAchievements().remove((Integer) GDAchievement.NO_DEATHS.getId());
 
                 gamePlayer.onDeath(damage);
             }
