@@ -186,8 +186,7 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
 
             target.playSound(location, Sound.FIREWORK_TWINKLE, 1.0F, 1.3F);
             target.playSound(location, Sound.LEVEL_UP, 1.0F, 1.0F);
-            target.sendMessage(ChatColor.AQUA + HyriLanguageMessage.get("message.player.get-down").getValue(target.getUniqueId())
-                    .replace("%player%", gamePlayer.getPlayer().getName()));
+            target.sendMessage(GDMessage.MESSAGE_JUMP_END.asString(target).replace("%player%", gamePlayer.asHyriPlayer().getNameWithRank()));
         });
 
         new BukkitRunnable() {

@@ -29,6 +29,7 @@ public class PotionItem extends ShopItem {
         lore.addAll(ListReplacer.replace(GDMessage.ITEM_SHOP_LORE.asList(player), "%price%", String.valueOf(this.price)).list());
 
         return new ItemBuilder(this.itemStack.clone())
+                .withAllItemFlags()
                 .withLore(lore)
                 .build();
     }
