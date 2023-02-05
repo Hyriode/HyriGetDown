@@ -31,6 +31,9 @@ jobs:
           USERNAME: ${{ github.actor }}
           TOKEN: ${{ secrets.TOKEN }}
 
+      - name: Rename Jar
+        run: mv build/libs/HyriGetDown-*.jar build/libs/HyriGetDown.jar
+
       - name: Upload Jar
         uses: azure/CLI@v1
         env:
@@ -38,5 +41,3 @@ jobs:
           CONTAINER_NAME: ${{ secrets.DEV_CONTAINER }}
         with:
           inlineScript: az storage blob upload-batch --connection-string $CONNECTION_STRING --source build/libs --destination $CONTAINER_NAME --destination-path getdown --overwrite
-      - name: Rename Jar
-        run: mv build/libs/HyriGetDown-*.jar build/libs/HyriGetDown.jar
