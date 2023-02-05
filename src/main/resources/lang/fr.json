@@ -11,7 +11,7 @@
   "title.jump.end": "&6Vainqueur",
   "title.jump.next-map": "&bCarte suivante",
 
-  "message.jump.end": "%player% &7est arrivé\n&aen bas&7!",
+  "message.jump.end": "%player% &7est arrivé &aen bas&7!",
   "message.jump.death": "%player% &7est mort.",
 
   "scoreboard.death-match.kills": "&fKills: &b%kills%",
@@ -65,6 +65,6 @@
   "bonus.resistance.name": "Résistance",
   "bonus.nausea.name": "Nausée",
 
-  "achievement.no-deaths.name": "Vous n'êtes pas mort de la partie, + %coins% coins",
-  "achievement.no-damages.name": "Vous n'avez pris aucun dégat cette partie, + %coins% coins"
+  "achievement.no-deaths.name": "&bVous n'êtes pas mort de la partie, + &3%coins% &bcoins",
+  "achievement.no-damages.name": "&bVous n'avez pris aucun dégat cette partie, + &3%coins% &bcoins"
 }

@@ -11,7 +11,7 @@
   "title.jump.end": "&6Winner",
   "title.jump.next-map": "&bNext map",
 
-  "message.jump.end": "%player% &7just went\n&aall the way down&7!",
+  "message.jump.end": "%player% &7just went &aall the way down&7!",
   "message.jump.death": "%player% &7died.",
 
   "scoreboard.death-match.kills": "&fKills: &b%kills%",
@@ -65,6 +65,6 @@
   "bonus.resistance.name": "Resistance",
   "bonus.nausea.name": "Nausea",
 
-  "achievement.no-deaths.name": "You did not die this game, + %coins% coins",
-  "achievement.no-damages.name": "You did not take any damages this game, + %coins% coins"
+  "achievement.no-deaths.name": "&bYou did not die this game, + &3%coins% &bcoins",
+  "achievement.no-damages.name": "&bYou did not take any damages this game, + &3%coins% &bcoins"
 }
