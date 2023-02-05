@@ -31,6 +31,9 @@ jobs:
           USERNAME: ${{ github.actor }}
           TOKEN: ${{ secrets.TOKEN }}
 
+      - name: Rename Jar
+        run: mv build/libs/HyriGetDown-*.jar build/libs/HyriGetDown.jar
+
       - name: Upload Jar
         uses: azure/CLI@v1
         env:
