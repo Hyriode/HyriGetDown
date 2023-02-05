@@ -179,13 +179,12 @@ public class GDGame extends HyriGame<GDGamePlayer> {
 
         this.getPlayers().forEach(player -> {
             player.getPlayer().sendMessage(GDMessage.MESSAGE_BUY_PHASE_NAME.asLang().getValue(player.getUniqueId()));
-            Title.sendTitle(player.getPlayer(), ChatColor.DARK_AQUA + "Phase d’achat", ChatColor.AQUA + "Préparer votre équipement", 5, 40, 5);
 
             for (Integer achievementId : player.getAchievements()) {
                 final GDAchievement achievement = GDAchievement.getById(achievementId);
 
-                player.getPlayer().sendMessage(ChatColor.AQUA + HyriLanguageMessage.get(achievement.getKey()).getValue(player.getUniqueId())
-                                .replace("%coins%", ChatColor.DARK_AQUA + "" + achievement.getCoins() + "" + ChatColor.AQUA));
+                player.getPlayer().sendMessage(HyriLanguageMessage.get(achievement.getKey()).getValue(player.getUniqueId())
+                        .replace("%coins%", String.valueOf(achievement.getCoins())));
                 player.addCoins(achievement.getCoins());
             }
         });
