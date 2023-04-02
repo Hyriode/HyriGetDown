@@ -11,13 +11,21 @@ java {
     }
 }
 
+configurations.all {
+    // Check for updates every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 compileJava {
     targetCompatibility = sourceCompatibility = JavaVersion.VERSION_1_8
     options.encoding = 'UTF-8'
 }
 
-tasks.withType(Javadoc) {
-    options.encoding = 'UTF-8'
+jar {
+    manifest {
+        attributes 'Specific-Version': project.version
+        attributes 'Implementation-Version': "${ project.version }-${ commitSha }-${ buildNumber }"
+    }
 }
 
 repositories {
@@ -44,16 +52,6 @@ dependencies {
 
 processResources {
     filter {
-        it.replace('@version@', project.version)
-    }
-}
-
-task deploy(dependsOn: build) {
-    doLast {
-        delete "H:/Dev/dev Mc/Serveurs/hyriode/HyriGetDown/plugins/HyriGetDown-1.0.0.jar"
-        copy {
-            from "H:/Dev/dev Mc/DevPlug/hyriode/HyriGetDown/build/libs/HyriGetDown-1.0.0.jar"
-            into "H:/Dev/dev Mc/Serveurs/hyriode/HyriGetDown/plugins"
-        }
+        it.replace('@version@', "${ project.version }-${ commitSha }-${ buildNumber }")
     }
 }
