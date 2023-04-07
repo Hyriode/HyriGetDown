@@ -18,34 +18,40 @@ import java.util.logging.Level;
  */
 public class GDDeathMatchWorld extends GDWorld<GDDeathMatchConfig> {
 
+    private final Queue<LocationWrapper> spawns = new ArrayDeque<>();
+
     public GDDeathMatchWorld(String name) {
         super(Type.DEATH_MATCH, name, GDDeathMatchConfig.class);
 
         if (this.config.getPlayerSpawns().size() < 12) {
             HyriGetDown.log(Level.SEVERE, "There are not enough player spawns in the death match config (12 minimum)!");
         }
-    }
 
-    @Override
-    public void teleportPlayers() {
         final List<LocationWrapper> spawns = this.config.getPlayerSpawns();
 
         Collections.shuffle(spawns);
 
-        final Queue<LocationWrapper> queue = new ArrayDeque<>(spawns);
+        this.spawns.addAll(spawns);
+    }
 
+    @Override
+    public void teleportPlayers() {
         for (GDGamePlayer gamePlayer : HyriGetDown.get().getGame().getPlayers()) {
-            final LocationWrapper spawn = queue.poll();
-
-            if (spawn == null) {
-                continue;
-            }
-
-            final Player player = gamePlayer.getPlayer();
-
-            player.setFallDistance(0.0F);
-            player.teleport(spawn.asBukkit(this.asBukkit()));
+            this.teleportPlayer(gamePlayer.getPlayer());
         }
+    }
+
+    public void teleportPlayer(Player player) {
+        final LocationWrapper spawn = this.spawns.poll();
+
+        if (spawn == null) {
+            return;
+        }
+
+        player.setFallDistance(0.0F);
+        player.teleport(spawn.asBukkit(this.asBukkit()));
+
+        this.spawns.add(spawn);
     }
 
 }

@@ -17,9 +17,9 @@ import java.util.function.Consumer;
  */
 public class DevJumpConfig extends GDJumpConfig {
 
-    public DevJumpConfig(GDJumpDifficulty difficulty) {
+    public DevJumpConfig() {
         super(
-                difficulty, new LocationWrapper(0.5, 101, 0.5, 0, 0),
+                new LocationWrapper(0.5, 101, 0.5, 0, 0),
                 textures(),
                 new AreaWrapper(new LocationWrapper(-35, 0, -35), new LocationWrapper(35, 98, 35)),
                 100, 1

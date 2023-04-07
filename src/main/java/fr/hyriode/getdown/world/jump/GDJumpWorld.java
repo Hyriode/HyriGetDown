@@ -1,6 +1,5 @@
 package fr.hyriode.getdown.world.jump;
 
-import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.getdown.HyriGetDown;
 import fr.hyriode.getdown.game.GDGame;
 import fr.hyriode.getdown.game.GDGamePlayer;
@@ -15,11 +14,7 @@ import fr.hyriode.getdown.world.jump.block.coins.GDNormalCoinsBlock;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
 import fr.hyriode.hyrame.title.Title;
 import fr.hyriode.hyrame.utils.PlayerUtil;
-import fr.hyriode.hyrame.utils.Symbols;
 import fr.hyriode.hyrame.utils.block.Cuboid;
-import fr.hyriode.hyrame.utils.list.ListReplacer;
-import fr.hyriode.hyrame.utils.list.ListUtil;
-import fr.hyriode.hyrame.utils.player.PlayerHeadAPI;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -29,7 +24,6 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
@@ -40,6 +34,8 @@ import java.util.function.Consumer;
  */
 public class GDJumpWorld extends GDWorld<GDJumpConfig> {
 
+    private final GDJumpDifficulty difficulty;
+
     private final List<GDJumpBlock> blocks;
 
     private boolean ended;
@@ -47,6 +43,7 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
 
     public GDJumpWorld(String name) {
         super(Type.JUMP, name, GDJumpConfig.class);
+        this.difficulty = GDJumpDifficulty.values()[ThreadLocalRandom.current().nextInt(GDJumpDifficulty.values().length)];
         this.blocks = new ArrayList<>();
 
         this.registerBlock(new GDBonusBlock());
@@ -68,7 +65,7 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
         final Cuboid cuboid = this.config.getArea().asArea(this.asBukkit()).toCuboid();
 
         for (Block block : cuboid.getBlocks()) {
-            if (!this.checkAroundBlock(block) || block.getType() != Material.AIR || random.nextDouble() > this.config.getDifficulty().getBlocksPercentage()) {
+            if (!this.checkAroundBlock(block) || block.getType() != Material.AIR || random.nextDouble() > this.difficulty.getBlocksPercentage()) {
                 continue;
             }
 
@@ -153,7 +150,8 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
     public void onEndReached(GDGamePlayer gamePlayer) {
         this.ended = true;
 
-        gamePlayer.addCoins(this.config.getDifficulty().getCoinsReward());
+        gamePlayer.addSuccessfulJump();
+        gamePlayer.addCoins(this.difficulty.getCoinsReward());
 
         final Consumer<Consumer<Player>> players = consumer -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
@@ -228,7 +226,7 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
     public void checkBlock(Block block, Player player) {
         final List<MetadataValue> values = block.getMetadata(GDJumpBlock.METADATA);
 
-        if (values == null || values.size() <= 0) {
+        if (values == null || values.size() == 0) {
             return;
         }
 
@@ -256,6 +254,10 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
 
     public boolean isSwitchingMap() {
         return this.switchingMap;
+    }
+
+    public GDJumpDifficulty getDifficulty() {
+        return this.difficulty;
     }
 
 }

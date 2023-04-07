@@ -8,9 +8,9 @@ import fr.hyriode.api.language.HyriLanguageMessage;
  */
 public enum GDJumpDifficulty {
 
-    HARD("hard", 0.01, 200),
-    MEDIUM("medium", 0.016, 250),
-    EASY("easy", 0.025, 300);
+    HARD("hard", 0.012, 200),
+    MEDIUM("medium", 0.018, 150),
+    EASY("easy", 0.025, 100);
 
     private HyriLanguageMessage displayName;
 

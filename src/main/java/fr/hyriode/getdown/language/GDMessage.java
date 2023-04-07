@@ -24,14 +24,27 @@ public enum GDMessage {
     SCOREBOARD_JUMP_TOP("scoreboard.jump.top"),
     SCOREBOARD_JUMP_YOU("scoreboard.jump.you"),
 
+    SCOREBOARD_DEATH_MATCH_KILLS("scoreboard.death-match.kills"),
+    SCOREBOARD_DEATH_MATCH_PLAYERS("scoreboard.death-match.players"),
+
+    SCOREBOARD_SPECTATOR_MAP("scoreboard.spectator.map"),
+    SCOREBOARD_SPECTATOR_PHASE("scoreboard.spectator.phase"),
+    SCOREBOARD_SPECTATOR_PLAYERS("scoreboard.spectator.players"),
+
     TITLE_JUMP_END("title.jump.end"),
     TITLE_JUMP_NEXT_MAP("title.jump.next-map"),
 
     MESSAGE_JUMP_DEATH("message.jump.death"),
     MESSAGE_JUMP_END("message.jump.end"),
 
-    SCOREBOARD_DEATH_MATCH_KILLS("scoreboard.death-match.kills"),
-    SCOREBOARD_DEATH_MATCH_PLAYERS("scoreboard.death-match.players"),
+    MESSAGE_ELIMINATED("message.eliminated"),
+
+    MESSAGE_ACHIEVEMENT_COMPLETED("message.achievement.completed"),
+    LINE_ACHIEVEMENT_BONUS("line.achievement.bonus"),
+    LINE_ACHIEVEMENT_COMPLETED("line.achievement.completed"),
+    LINE_ACHIEVEMENT_NOT_COMPLETED("line.achievement.not-completed"),
+    GUI_ITEM_ACHIEVEMENTS_NAME("gui-item.achievements.name"),
+    GUI_ITEM_ACHIEVEMENTS_LORE("gui-item.achievements.lore"),
 
     MESSAGE_BUY_PHASE_NAME("message.buy-phase.switching"),
     ACTION_BAR_BUY_PHASE_TIME("action-bar.buy-phase.time"),

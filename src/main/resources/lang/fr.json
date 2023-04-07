@@ -1,5 +1,26 @@
 {
-  "game.description": "&fDescendez en bas de la carte tout en gagnant des coins et en \n&framassant des bonus, afin d'acheter votre équipement pour élminer les autres\n&7joueurs.",
+  "game.description": "&fDescendez en bas de la carte tout en gagnant des coins et en framassant des bonus, afin d'acheter votre équipement pour éliminer les autres joueurs.",
+
+  "waiting-room.npc.kills": "Kills",
+  "waiting-room.npc.final-kills": "Final Kills",
+  "waiting-room.npc.jump-deaths": "Morts (jump)",
+  "waiting-room.npc.deathmatch-deaths": "Morts (deathmatch)",
+  "waiting-room.npc.successful-jumps": "Arrivées en premier",
+  "waiting-room.npc.earned-coins": "Coins gagnés",
+  "waiting-room.npc.victories": "Victoires",
+  "waiting-room.npc.games-played": "Parties jouées",
+  "waiting-room.npc.played-time": "Temps de jeu",
+
+  "leaderboard.experience.display": "&3Experience &8┃ &7Classement",
+  "leaderboard.kills.display": "&3Kills &8┃ &7Classement",
+  "leaderboard.victories.display": "&3Victoires &8┃ &7Classement",
+  "leaderboard.successful-jumps.display": "&3Arrivées en premier &8┃ &7Classement",
+
+  "message.game.end.kills": "%position% %player% &7- &b%kills%",
+  "message.game.end.1": "§e1er",
+  "message.game.end.2": "§62ème",
+  "message.game.end.3": "§c3ème",
+  "message.game.end.nobody": "Personne",
 
   "scoreboard.time": "Temps: ",
 
@@ -8,17 +29,35 @@
   "scoreboard.jump.top": "&3Top 5:",
   "scoreboard.jump.you": " &7(VOUS)",
 
-  "title.jump.end": "&6Vainqueur",
-  "title.jump.next-map": "&bCarte suivante",
-
-  "message.jump.end": "%player% &7est arrivé &aen bas&7!",
-  "message.jump.death": "%player% &7est mort.",
-
   "scoreboard.death-match.kills": "&fKills: &b%kills%",
   "scoreboard.death-match.players": "&fJoueurs: &b%players%",
 
+  "scoreboard.spectator.map": "&fCarte: &b%map%",
+  "scoreboard.spectator.phase": "&fPhase: &b%phase%",
+  "scoreboard.spectator.players": "&fJoueurs: &b%players%",
+
+  "phase.jump.display": "Jump",
+  "phase.buy.display": "Achats",
+  "phase.deathmatch.display": "Combat à mort",
+
+  "title.jump.end": "&6Premier",
+  "title.jump.next-map": "&bCarte suivante",
+
+  "message.jump.end": "%player% &7est arrivé &aen bas&7!",
+  "message.jump.death": "%player% &7est mort poussé par %killer%&7.",
+
+  "message.eliminated": "&cEliminé!",
+
+  "message.achievement.completed": "&7Vous avez réussi l'achievement: &b%achievement%&7, vous remportez un bonus de &6+%coins% &7coins.",
+  "line.achievement.bonus": "&8▪ &7Bonus: &6%coins% ⛃",
+  "line.achievement.completed": "&aRéussi",
+  "line.achievement.not-completed": "&cPas encore réussi",
+  "gui.achievements.name": "&7Achievements",
+  "gui-item.achievements.name": "&bAchievements",
+  "gui-item.achievements.lore": "&7Les achievements peuvent être accomplis\n&7au cours d'une partie et permettent\n&7d'obtenir des bonus de &6coins &7pour\n&7acheter son équipement.",
+  "item.achievements.name": "&aAchievements",
+
   "message.buy-phase.switching": "\n&7Phase de jump &aterminée&7! Achète désormais du stuff avec tes &6coins &7gagnés.\n \n",
-  "message.player.get-down": "%player% est arrivé en bas, changement d'arène en cours....",
   "action-bar.buy-phase.time": "&b%seconds% &7seconde(s) avant le &cDeathMatch",
 
   "gui.shop.name": "&3GetDown &8┃ &7Boutique",
@@ -65,6 +104,8 @@
   "bonus.resistance.name": "Résistance",
   "bonus.nausea.name": "Nausée",
 
-  "achievement.no-deaths.name": "&bVous n'êtes pas mort de la partie, + &3%coins% &bcoins",
-  "achievement.no-damages.name": "&bVous n'avez pris aucun dégat cette partie, + &3%coins% &bcoins"
+  "achievement.no-deaths.name": "&bImmortel",
+  "achievement.no-deaths.description": "&7Ne pas mourir pendant la\n&7phase de jump.",
+  "achievement.no-damages.name": "&bInvulnérable",
+  "achievement.no-damages.description": "&7Ne pas prendre de dégâts\n&7pendant la phase de jump."
 }

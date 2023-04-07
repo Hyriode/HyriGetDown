@@ -8,6 +8,7 @@ import fr.hyriode.hyrame.utils.ItemUtil;
 import fr.hyriode.hyrame.utils.list.ListReplacer;
 import fr.hyriode.hyrame.utils.list.ListUtil;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -42,6 +43,8 @@ public class ShopItem {
         }
 
         if (ItemUtil.addItemInPlayerInventory(this.itemStack.clone(), player)) {
+            player.playSound(player.getLocation(), Sound.CLICK, 0.5F, 2.0F);
+
             gamePlayer.removeCoins(this.price);
         } else {
             player.sendMessage(GDMessage.MESSAGE_SHOP_NOT_ENOUGH_SPACE.asString(player));

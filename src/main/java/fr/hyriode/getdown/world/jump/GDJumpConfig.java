@@ -13,24 +13,18 @@ import java.util.List;
  */
 public class GDJumpConfig extends GDWorldConfig {
 
-    private final GDJumpDifficulty difficulty;
     private final LocationWrapper spawn;
     private final List<BlockTexture> blocks;
     private final AreaWrapper area;
     private final int maximumAttackHeight;
     private final int endHeight;
 
-    public GDJumpConfig(GDJumpDifficulty difficulty, LocationWrapper spawn, List<BlockTexture> blocks, AreaWrapper area, int maximumAttackHeight, int endHeight) {
-        this.difficulty = difficulty;
+    public GDJumpConfig(LocationWrapper spawn, List<BlockTexture> blocks, AreaWrapper area, int maximumAttackHeight, int endHeight) {
         this.spawn = spawn;
         this.blocks = blocks;
         this.area = area;
         this.maximumAttackHeight = maximumAttackHeight;
         this.endHeight = endHeight;
-    }
-
-    public GDJumpDifficulty getDifficulty() {
-        return this.difficulty;
     }
 
     public LocationWrapper getSpawn() {

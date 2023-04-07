@@ -16,8 +16,7 @@ public class FoodGUI extends ShopGUI {
 
         this.addItem(22, new ShopItem(new ItemStack(Material.APPLE, 4), 2));
         this.addItem(23, new ShopItem(new ItemStack(Material.COOKED_BEEF, 8), 3));
-        this.addItem(31, new ShopItem(Material.CAKE, 4));
-        this.addItem(32, new ShopItem(Material.GOLDEN_APPLE, 20));
+        this.addItem(31, new ShopItem(Material.GOLDEN_APPLE, 20));
     }
 
 }

@@ -9,8 +9,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
+import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -30,20 +32,22 @@ public abstract class GDWorld<T extends GDWorldConfig> {
         this.name = name;
 
         if (HyriAPI.get().getConfig().isDevEnvironment()) {
-            this.config = (this.type == Type.JUMP) ? configClass.cast(new DevJumpConfig(GDJumpDifficulty.values()[ThreadLocalRandom.current().nextInt(GDJumpDifficulty.values().length)])) : configClass.cast(new DevDeathMatchConfig());
+            this.config = (this.type == Type.JUMP) ? configClass.cast(new DevJumpConfig()) : configClass.cast(new DevDeathMatchConfig());
         } else {
-            this.config = HyriAPI.get().getHystiaAPI().getConfigManager().getConfig(configClass, HyriGetDown.ID, this.type.getWorldsId(), this.name);
+            this.config = HyriAPI.get().getConfigManager().getConfig(configClass, HyriGetDown.ID, this.type.getWorldsId(), this.name);
         }
     }
 
     public void load() {
         HyriGetDown.log("Loading '" + this.name + "' world (type: " + this.type.name() + ")...");
 
+        final String folderName = this.name + "-" + UUID.randomUUID().toString().split("-")[0];
+
         if (!HyriAPI.get().getConfig().isDevEnvironment()) {
-            HyriAPI.get().getHystiaAPI().getWorldManager().loadWorld(new File(this.name), HyriAPI.get().getServer().getType(), this.type.getWorldsId(), this.name);
+            HyriAPI.get().getWorldManager().getWorld(HyriAPI.get().getServer().getType(), this.type.getWorldsId(), this.name).load(new File(folderName));
         }
 
-        new WorldCreator(this.name).createWorld();
+       this.bukkitWorld = new WorldCreator(folderName).createWorld();
     }
 
     public abstract void teleportPlayers();
@@ -61,7 +65,7 @@ public abstract class GDWorld<T extends GDWorldConfig> {
     }
 
     public World asBukkit() {
-        return this.bukkitWorld == null ? this.bukkitWorld = Bukkit.getWorld(this.name) : this.bukkitWorld;
+        return this.bukkitWorld;
     }
 
     public enum Type {

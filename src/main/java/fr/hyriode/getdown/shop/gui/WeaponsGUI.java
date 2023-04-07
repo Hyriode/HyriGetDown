@@ -18,7 +18,7 @@ public class WeaponsGUI extends ShopGUI {
         this.addItem(22, new ShopItem(Material.STONE_SWORD, 100));
         this.addItem(23, new ShopItem(Material.IRON_SWORD, 200));
         this.addItem(24, new ShopItem(Material.DIAMOND_SWORD, 300));
-        this.addItem(30, new ShopItem(Material.FISHING_ROD, 250));
+        this.addItem(30, new ShopItem(Material.FISHING_ROD, 200));
         this.addItem(31, new ShopItem(Material.BOW, 100));
         this.addItem(32, new ShopItem(new ItemStack(Material.ARROW, 3), 5));
     }

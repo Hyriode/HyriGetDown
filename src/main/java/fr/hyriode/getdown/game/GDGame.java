@@ -2,33 +2,36 @@ package fr.hyriode.getdown.game;
 
 import fr.hyriode.api.HyriAPI;
 import fr.hyriode.api.language.HyriLanguageMessage;
+import fr.hyriode.api.leaderboard.IHyriLeaderboardProvider;
+import fr.hyriode.api.leveling.NetworkLeveling;
+import fr.hyriode.api.player.IHyriPlayer;
+import fr.hyriode.api.player.IHyriPlayerSession;
 import fr.hyriode.getdown.HyriGetDown;
-import fr.hyriode.getdown.game.scoreboard.BuyScoreboard;
-import fr.hyriode.getdown.game.scoreboard.DeathMatchScoreboard;
-import fr.hyriode.getdown.game.scoreboard.GDScoreboard;
-import fr.hyriode.getdown.game.scoreboard.JumpScoreboard;
+import fr.hyriode.getdown.api.GDData;
+import fr.hyriode.getdown.api.GDStatistics;
+import fr.hyriode.getdown.game.achievement.AchievementsItem;
+import fr.hyriode.getdown.game.achievement.GDAchievement;
+import fr.hyriode.getdown.game.scoreboard.*;
 import fr.hyriode.getdown.language.GDMessage;
 import fr.hyriode.getdown.world.GDWorld;
 import fr.hyriode.getdown.world.jump.GDJumpWorld;
+import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.actionbar.ActionBar;
 import fr.hyriode.hyrame.game.HyriGame;
-import fr.hyriode.hyrame.game.HyriGamePlayer;
+import fr.hyriode.hyrame.game.HyriGameState;
 import fr.hyriode.hyrame.game.HyriGameType;
 import fr.hyriode.hyrame.game.protocol.HyriDeathProtocol;
 import fr.hyriode.hyrame.game.protocol.HyriLastHitterProtocol;
 import fr.hyriode.hyrame.game.protocol.HyriWaitingProtocol;
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
+import fr.hyriode.hyrame.game.util.HyriGameMessages;
+import fr.hyriode.hyrame.game.util.HyriRewardAlgorithm;
 import fr.hyriode.hyrame.title.Title;
 import fr.hyriode.hyrame.utils.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -36,8 +39,11 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Created by AstFaster
@@ -55,11 +61,11 @@ public class GDGame extends HyriGame<GDGamePlayer> {
     private int worldIndex = -1;
     private GDWorld<?> currentWorld;
 
-    public GDGame() {
-        super(HyriGetDown.get().getHyrame(), HyriGetDown.get(),
+    public GDGame(HyriGetDown plugin) {
+        super(IHyrame.get(), plugin,
                 HyriAPI.get().getConfig().isDevEnvironment() ? HyriAPI.get().getGameManager().createGameInfo(HyriGetDown.ID, "GetDown") : HyriAPI.get().getGameManager().getGameInfo(HyriGetDown.ID),
                 GDGamePlayer.class,
-                HyriAPI.get().getConfig().isDevEnvironment() ? GDGameType.SOLO : HyriGameType.getFromData(GDGameType.values()));
+                HyriAPI.get().getConfig().isDevEnvironment() ? GDGameType.NORMAL : HyriGameType.getFromData(GDGameType.values()));
         this.waitingRoom = new GDWaitingRoom(this);
         this.usingGameTabList = false;
         this.scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
@@ -85,28 +91,58 @@ public class GDGame extends HyriGame<GDGamePlayer> {
         super.handleLogin(player);
 
         final GDGamePlayer gamePlayer = this.getPlayer(player);
-
-        if (gamePlayer == null) {
-            return;
-        }
-
-        final HyriGameTeam team = new HyriGameTeam(player.getName(), null, null, 1);
+        final GDData data = GDData.get(player.getUniqueId());
+        final GDStatistics statistics = GDStatistics.get(player.getUniqueId());
+        final HyriGameTeam team = new HyriGameTeam(player.getName(), null, null, 1){
+            @Override
+            public String getFormattedDisplayName(Player target) {
+                return gamePlayer.formatNameWithTeam();
+            }
+        };
 
         this.registerTeam(team);
 
         team.addPlayer(gamePlayer);
+        gamePlayer.setData(data);
+        gamePlayer.setStatistics(statistics);
+
+        this.hyrame.getItemManager().giveItem(gamePlayer.getPlayer(), 4, AchievementsItem.class);
     }
 
     @Override
     public void handleLogout(Player player) {
+        final GDGamePlayer gamePlayer = this.getPlayer(player);
+        final IHyriPlayer account = gamePlayer.asHyriPlayer();
+        final GDData data = gamePlayer.getData();
+        final GDStatistics statistics = gamePlayer.getStatistics();
+        final GDStatistics.Data statisticsData = statistics.getData(this.getType());
+
+        if (!this.getState().isAccessible()) {
+            statisticsData.addGamesPlayed(1);
+            statisticsData.addKills(gamePlayer.getKills());
+            statisticsData.addJumpDeaths(gamePlayer.getJumpDeaths());
+            statisticsData.addEarnedCoins(gamePlayer.getCoins());
+            statisticsData.addDeathmatchDeaths(gamePlayer.getDeathmatchDeaths());
+            statisticsData.addSuccessfulJumps(gamePlayer.getSuccessfulJumps());
+        } else {
+            this.unregisterTeam(gamePlayer.getTeam());
+        }
+
+        data.update(account);
+        statistics.update(account);
+
         super.handleLogout(player);
 
-        this.win(this.getWinner());
+        if (this.getState() == HyriGameState.PLAYING) {
+            this.win(this.getWinner());
+        }
     }
 
     @Override
     public void start() {
         super.start();
+
+        this.protocolManager.enableProtocol(new HyriLastHitterProtocol(this.hyrame, this.plugin, 8 * 20L));
 
         this.coinsObjective = this.scoreboard.registerNewObjective("coins", "dummy");
         this.coinsObjective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
@@ -138,7 +174,88 @@ public class GDGame extends HyriGame<GDGamePlayer> {
             player.teleport(HyriGetDown.get().getConfiguration().getWaitingRoom().getSpawn().asBukkit());
         }
 
+        winner.getPlayers().forEach(p -> {
+            final GDGamePlayer gamePlayer = p.cast();
+
+            gamePlayer.getStatistics().getData(this.getType()).addVictories(1);
+        });
+
+        this.sendWinMessage(winner);
+
         super.win(winner);
+    }
+
+    private void sendWinMessage(HyriGameTeam winner) {
+        final List<HyriLanguageMessage> positions = Arrays.asList(
+                HyriLanguageMessage.get("message.game.end.1"),
+                HyriLanguageMessage.get("message.game.end.2"),
+                HyriLanguageMessage.get("message.game.end.3")
+        );
+
+        final List<GDGamePlayer> topKillers = new ArrayList<>(this.players);
+
+        topKillers.sort((o1, o2) -> o2.getKills() - o1.getKills());
+
+        final Function<Player, List<String>> killersLineProvider = player -> {
+            final List<String> killersLine = new ArrayList<>();
+
+            for (int i = 0; i <= 2; i++) {
+                final String killerLine = HyriLanguageMessage.get("message.game.end.kills").getValue(player).replace("%position%", positions.get(i).getValue(player));
+
+                if (topKillers.size() > i){
+                    final GDGamePlayer topKiller = topKillers.get(i);
+
+                    killersLine.add(killerLine.replace("%player%", topKiller.formatNameWithTeam()).replace("%kills%", String.valueOf(topKiller.getKills())));
+                    continue;
+                }
+
+                killersLine.add(killerLine.replace("%player%", HyriLanguageMessage.get("message.game.end.nobody").getValue(player)).replace("%kills%", "0"));
+            }
+
+            return killersLine;
+        };
+
+        // Send message to not-playing players
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            final GDGamePlayer gamePlayer = this.getPlayer(player);
+
+            if (gamePlayer == null) {
+                player.spigot().sendMessage(HyriGameMessages.createWinMessage(this, player, winner, killersLineProvider.apply(player), null));
+            }
+        }
+
+        for (GDGamePlayer gamePlayer : this.players) {
+            final IHyriPlayer account = gamePlayer.asHyriPlayer();
+            final UUID playerId = gamePlayer.getUniqueId();
+            final int kills = gamePlayer.getKills();
+            final boolean isWinner = winner.contains(gamePlayer);
+            final long hyris = account.getHyris().add(HyriRewardAlgorithm.getHyris(kills, gamePlayer.getPlayTime(), isWinner) + gamePlayer.getSuccessfulJumps() * 30L).withMessage(false).exec();
+            final double xp = account.getNetworkLeveling().addExperience(HyriRewardAlgorithm.getXP(kills, gamePlayer.getPlayTime(), isWinner) + gamePlayer.getSuccessfulJumps() * 30D);
+
+            // Update leaderboards
+            final IHyriLeaderboardProvider provider = HyriAPI.get().getLeaderboardProvider();
+
+            provider.getLeaderboard(NetworkLeveling.LEADERBOARD_TYPE, "rotating-game-experience").incrementScore(playerId, xp);
+            provider.getLeaderboard(HyriGetDown.ID, "kills").incrementScore(playerId, kills);
+            provider.getLeaderboard(HyriGetDown.ID, "successful-jumps").incrementScore(playerId, gamePlayer.getSuccessfulJumps());
+
+            if (isWinner) {
+                provider.getLeaderboard(HyriGetDown.ID, "victories").incrementScore(playerId, 1);
+            }
+
+            account.update();
+
+            // Send message
+            final String rewardsLine = ChatColor.LIGHT_PURPLE + "+" + hyris + " Hyris " + ChatColor.GREEN + "+" + xp + " XP";
+
+            if (gamePlayer.isOnline()) {
+                final Player player = gamePlayer.getPlayer();
+
+                player.spigot().sendMessage(HyriGameMessages.createWinMessage(this, gamePlayer.getPlayer(), winner, killersLineProvider.apply(player), rewardsLine));
+            } else if (HyriAPI.get().getPlayerManager().isOnline(playerId)) {
+                HyriAPI.get().getPlayerManager().sendMessage(playerId, HyriGameMessages.createOfflineWinMessage(this, account, rewardsLine));
+            }
+        }
     }
 
     public void switchToNextJumpWorld() {
@@ -148,8 +265,9 @@ public class GDGame extends HyriGame<GDGamePlayer> {
         final GDJumpWorld world = worlds.get(this.worldIndex);
 
         this.currentWorld = world;
-
         this.currentWorld.teleportPlayers();
+
+        IHyrame.get().getScoreboardManager().getScoreboards(SpectatorScoreboard.class).forEach(SpectatorScoreboard::update);
 
         for (GDGamePlayer gamePlayer : this.players) {
             if (!gamePlayer.isOnline()) {
@@ -158,7 +276,7 @@ public class GDGame extends HyriGame<GDGamePlayer> {
 
             final Player player = gamePlayer.getPlayer();
 
-            Title.sendTitle(player, ChatColor.AQUA + this.currentWorld.getName(), world.getConfig().getDifficulty().getDisplayName().getValue(player), 5, 40, 5);
+            Title.sendTitle(player, ChatColor.AQUA + this.currentWorld.getName(), world.getDifficulty().getDisplayName().getValue(player), 5, 40, 5);
         }
     }
 
@@ -173,19 +291,35 @@ public class GDGame extends HyriGame<GDGamePlayer> {
             player.teleport(HyriGetDown.get().getConfiguration().getWaitingRoom().getSpawn().asBukkit());
         }
 
-        for (GDScoreboard scoreboard : this.hyrame.getScoreboardManager().getScoreboards(JumpScoreboard.class)) {
-            scoreboard.hide();
-        }
+        this.scoreboardsTask.cancel();
 
-        this.getPlayers().forEach(player -> {
-            player.getPlayer().sendMessage(GDMessage.MESSAGE_BUY_PHASE_NAME.asLang().getValue(player.getUniqueId()));
+        IHyrame.get().getScoreboardManager().getScoreboards(SpectatorScoreboard.class).forEach(SpectatorScoreboard::update);
+        IHyrame.get().getScoreboardManager().getScoreboards(JumpScoreboard.class).forEach(JumpScoreboard::hide);
 
-            for (Integer achievementId : player.getAchievements()) {
+        this.getPlayers().forEach(gamePlayer -> {
+            if (!gamePlayer.isOnline()) {
+                return;
+            }
+
+            final Player player = gamePlayer.getPlayer();
+
+            player.sendMessage(GDMessage.MESSAGE_BUY_PHASE_NAME.asLang().getValue(player.getUniqueId()));
+
+            for (Integer achievementId : gamePlayer.getAchievements()) {
                 final GDAchievement achievement = GDAchievement.getById(achievementId);
 
-                player.getPlayer().sendMessage(HyriLanguageMessage.get(achievement.getKey()).getValue(player.getUniqueId())
-                        .replace("%coins%", String.valueOf(achievement.getCoins())));
-                player.addCoins(achievement.getCoins());
+                if (achievement == null) {
+                    continue;
+                }
+
+                final int coins = achievement.getCoins();
+
+                player.sendMessage(GDMessage.MESSAGE_ACHIEVEMENT_COMPLETED.asString(player).
+                        replace("%achievement%", achievement.getDisplay(player)
+                        .replace("%coins%", String.valueOf(coins))));
+
+                gamePlayer.addCoins(coins);
+                gamePlayer.getData().addCompletedAchievement(achievement);
             }
         });
 
@@ -195,12 +329,16 @@ public class GDGame extends HyriGame<GDGamePlayer> {
 
         new BukkitRunnable() {
 
-            private int index = 150;
+            private int index = 90;
 
             @Override
             public void run() {
                 if (this.index == 0) {
                     for (GDGamePlayer gamePlayer : players) {
+                        if (!gamePlayer.isOnline()) {
+                            continue;
+                        }
+
                         gamePlayer.getPlayer().getInventory().setItem(4, null);
                     }
 
@@ -209,6 +347,10 @@ public class GDGame extends HyriGame<GDGamePlayer> {
                     this.cancel();
                 } else if (this.index <= 5) {
                     for (GDGamePlayer gamePlayer : players) {
+                        if (!gamePlayer.isOnline()) {
+                            continue;
+                        }
+
                         final Player player = gamePlayer.getPlayer();
 
                         player.playSound(player.getLocation(), Sound.NOTE_PLING, 1.0F, 1.0F);
@@ -218,6 +360,10 @@ public class GDGame extends HyriGame<GDGamePlayer> {
                 }
 
                 for (GDGamePlayer gamePlayer : players) {
+                    if (!gamePlayer.isOnline()) {
+                        continue;
+                    }
+
                     final Player player = gamePlayer.getPlayer();
                     final ActionBar actionBar = new ActionBar(GDMessage.ACTION_BAR_BUY_PHASE_TIME.asString(player).replace("%seconds%", String.valueOf(this.index)));
 
@@ -232,47 +378,26 @@ public class GDGame extends HyriGame<GDGamePlayer> {
     public void switchToDeathMatch() {
         this.coinsObjective.unregister();
 
-        this.currentPhase = GDPhase.DEATH_MATCH;
+        this.currentPhase = GDPhase.DEATHMATCH;
         this.currentWorld = HyriGetDown.get().getDeathMatchWorld();
-        this.scoreboardsTask.cancel();
-        this.protocolManager.enableProtocol(new HyriLastHitterProtocol(this.hyrame, this.plugin, 8 * 20L));
-        this.protocolManager.enableProtocol(new HyriDeathProtocol(this.hyrame, this.plugin, gamePlayer -> {
-            final Player player = gamePlayer.getPlayer();
-            final List<HyriLastHitterProtocol.LastHitter> lastHitters = this.protocolManager.getProtocol(HyriLastHitterProtocol.class).getLastHitters(player);
+        this.protocolManager.enableProtocol(new HyriDeathProtocol(this.hyrame, this.plugin, initial -> {
+            final GDGamePlayer gamePlayer = initial.cast();
 
-            if (lastHitters != null) {
-                final HyriLastHitterProtocol.LastHitter hitter = lastHitters.get(0);
-
-                if (hitter != null) {
-                    final GDGamePlayer killer = this.getPlayer(hitter.getUniqueId());
-
-                    killer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 2, false, false));
-                    killer.addKill();
-                }
-            }
-
-            final PlayerInventory playerInventory = player.getInventory();
-            final Consumer<ItemStack[]> dropConsumer = itemStacks -> {
-                for (ItemStack itemStack : itemStacks) {
-                    if(itemStack != null && !itemStack.getType().equals(Material.AIR)) {
-                        player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
-                    }
-                }
-            };
-
-            dropConsumer.accept(playerInventory.getContents());
-            dropConsumer.accept(playerInventory.getArmorContents());
+            gamePlayer.onDeathmatchDeath();
 
             return false;
-        }));
+        }, new HyriDeathProtocol.Screen(0, player -> HyriGetDown.get().getDeathMatchWorld().teleportPlayer(player)), HyriDeathProtocol.ScreenHandler.Default.class));
+
+        IHyrame.get().getScoreboardManager().getScoreboards(SpectatorScoreboard.class).forEach(SpectatorScoreboard::update);
+        IHyrame.get().getScoreboardManager().getScoreboards(BuyScoreboard.class).forEach(BuyScoreboard::hide);
 
         this.currentWorld.teleportPlayers();
 
-        for (GDScoreboard scoreboard : this.hyrame.getScoreboardManager().getScoreboards(BuyScoreboard.class)) {
-            scoreboard.hide();
-        }
-
         for (GDGamePlayer gamePlayer : this.players) {
+            if (!gamePlayer.isOnline()) {
+                return;
+            }
+
             gamePlayer.onDeathMatchStart();
         }
 
@@ -302,14 +427,13 @@ public class GDGame extends HyriGame<GDGamePlayer> {
     }
 
     public HyriGameTeam getWinner() {
-        final List<HyriGamePlayer> alivePlayers = new ArrayList<>();
+        final List<GDGamePlayer> alivePlayers = this.getAlivePlayers();
 
-        for (HyriGamePlayer gamePlayer : this.players) {
-            if (!gamePlayer.isSpectator() && gamePlayer.isOnline()) {
-                alivePlayers.add(gamePlayer);
-            }
-        }
         return alivePlayers.size() != 1 ? null : alivePlayers.get(0).getTeam();
+    }
+
+    public List<GDGamePlayer> getAlivePlayers() {
+        return this.players.stream().filter(gamePlayer -> !gamePlayer.isSpectator() && gamePlayer.isOnline()).collect(Collectors.toList());
     }
 
     public Objective getCoinsObjective() {
@@ -318,6 +442,11 @@ public class GDGame extends HyriGame<GDGamePlayer> {
 
     public GDPhase getCurrentPhase() {
         return this.currentPhase;
+    }
+
+    @Override
+    public GDGameType getType() {
+        return (GDGameType) super.getType();
     }
 
 }

@@ -4,16 +4,22 @@ import fr.hyriode.api.HyriAPI;
 import fr.hyriode.api.event.HyriEventHandler;
 import fr.hyriode.api.event.HyriEventPriority;
 import fr.hyriode.getdown.HyriGetDown;
-import fr.hyriode.getdown.game.GDAchievement;
+import fr.hyriode.getdown.game.achievement.GDAchievement;
 import fr.hyriode.getdown.game.GDGame;
 import fr.hyriode.getdown.game.GDGamePlayer;
 import fr.hyriode.getdown.game.GDPhase;
+import fr.hyriode.getdown.game.scoreboard.SpectatorScoreboard;
+import fr.hyriode.getdown.language.GDMessage;
+import fr.hyriode.getdown.shop.item.ShopAccessorItem;
 import fr.hyriode.getdown.world.jump.GDJumpWorld;
+import fr.hyriode.hyrame.game.HyriGameSpectator;
 import fr.hyriode.hyrame.game.HyriGameState;
+import fr.hyriode.hyrame.game.event.player.HyriGameDeathEvent;
 import fr.hyriode.hyrame.game.event.player.HyriGameReconnectEvent;
 import fr.hyriode.hyrame.game.event.player.HyriGameReconnectedEvent;
 import fr.hyriode.hyrame.game.event.player.HyriGameSpectatorEvent;
-import fr.hyriode.hyrame.item.ItemBuilder;
+import fr.hyriode.hyrame.game.waitingroom.HyriWaitingRoom;
+import fr.hyriode.hyrame.item.ItemNBT;
 import fr.hyriode.hyrame.listener.HyriListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -32,14 +38,18 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by AstFaster
  * on 23/07/2022 at 14:22
  */
 public class PlayerListener extends HyriListener<HyriGetDown> {
+
+    private final List<UUID> hitCooldowns = new ArrayList<>();
 
     public PlayerListener(HyriGetDown plugin) {
         super(plugin);
@@ -66,12 +76,17 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
     @HyriEventHandler(priority = HyriEventPriority.LOWEST)
     public void onSpectator(HyriGameSpectatorEvent event) {
         final GDGame game = HyriGetDown.get().getGame();
+        final HyriGameSpectator spectator = event.getSpectator();
 
-        if (game.getState() != HyriGameState.PLAYING) {
-            return;
+        if (spectator instanceof GDGamePlayer && game.getState() != HyriGameState.PLAYING) {
+            game.win(game.getWinner());
+        } else {
+            spectator.getPlayer().teleport(game.getWaitingRoom().getConfig().getSpawn().asBukkit());
+
+            if (!(spectator instanceof GDGamePlayer)) {
+                new SpectatorScoreboard(spectator.getPlayer()).show();
+            }
         }
-
-        game.win(game.getWinner());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -79,7 +94,7 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
         final GDGame game = HyriGetDown.get().getGame();
         final GDGamePlayer gamePlayer = game.getPlayer((Player) event.getEntity());
 
-        if (gamePlayer == null || game.getCurrentPhase() != GDPhase.DEATH_MATCH) {
+        if (gamePlayer == null || game.getCurrentPhase() != GDPhase.DEATHMATCH) {
             return;
         }
 
@@ -95,7 +110,7 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
                 continue;
             }
 
-            if (new ItemBuilder(item).nbt().hasTag("HyriItem")) {
+            if (new ItemNBT(item).hasTag(ShopAccessorItem.NBT_TAG)) {
                 event.setCancelled(true);
             }
         }
@@ -105,7 +120,7 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
     public void onItemDrop(PlayerDropItemEvent event) {
         final GDGame game = HyriGetDown.get().getGame();
 
-        if (game.getCurrentPhase() != GDPhase.DEATH_MATCH) {
+        if (game.getCurrentPhase() != GDPhase.DEATHMATCH) {
             event.setCancelled(true);
         }
     }
@@ -130,7 +145,7 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
             return;
         }
 
-        if (!(entity instanceof Player) || phase == GDPhase.DEATH_MATCH) {
+        if (!(entity instanceof Player) || phase == GDPhase.DEATHMATCH) {
             return;
         }
 
@@ -158,9 +173,9 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
             if (!event.isCancelled()) {
                 event.setDamage(0.0D);
                 event.setCancelled(true);
-                gamePlayer.getAchievements().remove((Integer) GDAchievement.NO_DEATHS.getId());
 
-                gamePlayer.onDeath(damage);
+                gamePlayer.getAchievements().remove((Integer) GDAchievement.NO_DEATHS.getId());
+                gamePlayer.onJumpDeath();
             }
         }
     }
@@ -179,11 +194,17 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
         final GDGame game = HyriGetDown.get().getGame();
         final GDPhase phase = game.getCurrentPhase();
 
-        if (phase == GDPhase.JUMP) {
+        if (phase == GDPhase.JUMP && game.getPlayer(player) != null && game.getPlayer(dealer.getPlayer()) != null) {
             final int maxHeight = ((GDJumpWorld) game.getCurrentWorld()).getConfig().getMaximumAttackHeight();
 
-            if (player.getLocation().getY() >= maxHeight || dealer.getLocation().getY() >= maxHeight) {
+            if (player.getLocation().getY() >= maxHeight || dealer.getLocation().getY() >= maxHeight || this.hitCooldowns.contains(dealer.getUniqueId())) {
                 event.setCancelled(true);
+            } else {
+                final UUID dealerId = dealer.getUniqueId();
+
+                this.hitCooldowns.add(dealerId);
+
+                Bukkit.getScheduler().runTaskLaterAsynchronously(this.plugin, () -> this.hitCooldowns.remove(dealerId), 5 * 20L);
             }
         }
     }
@@ -192,6 +213,16 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
     public void onMove(PlayerMoveEvent event) {
         final GDGame game = HyriGetDown.get().getGame();
         final GDPhase phase = game.getCurrentPhase();
+
+        if (phase == GDPhase.BUY) {
+            final HyriWaitingRoom.Config config = game.getWaitingRoom().getConfig();
+            final double firstY = config.getFirstPos().getY();
+            final double secondY = config.getSecondPos().getY();
+
+            if (event.getTo().getY() < Math.min(firstY, secondY)) {
+                event.getPlayer().teleport(config.getSpawn().asBukkit());
+            }
+        }
 
         if (game.getState() != HyriGameState.PLAYING || phase != GDPhase.JUMP) {
             return;
@@ -226,10 +257,12 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
             return;
         }
 
-        final Location location = player.getLocation();
-        final Block block = location.getBlock().getRelative(BlockFace.DOWN);
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+            final Location location = player.getLocation();
+            final Block block = location.getBlock().getRelative(BlockFace.DOWN);
 
-        world.checkBlock(block, player);
+            world.checkBlock(block, player);
+        }, 10L);
     }
 
 }
