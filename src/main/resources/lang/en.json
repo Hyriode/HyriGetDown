@@ -2,7 +2,6 @@
   "game.description": "&fDrop down the map while winning coins and collecting bonuses, so to buy your equipment to eliminate the other players.",
 
   "waiting-room.npc.kills": "Kills",
-  "waiting-room.npc.final-kills": "Final Kills",
   "waiting-room.npc.jump-deaths": "Deaths (jump)",
   "waiting-room.npc.deathmatch-deaths": "Deaths (deathmatch)",
   "waiting-room.npc.successful-jumps": "Arrivals first",
@@ -24,6 +23,7 @@
   "scoreboard.time": "Time: ",
 
   "scoreboard.jump.map": "&fMap: &3%map% &7%index%/%total%",
+  "scoreboard.jump.difficulty": "&fDifficulty: %difficulty%",
   "scoreboard.jump.coins": "&fCoins: &b%coins%",
   "scoreboard.jump.top": "&3Top 5:",
   "scoreboard.jump.you": " &7(YOU)",
@@ -47,17 +47,10 @@
 
   "message.eliminated": "&cEliminated!",
 
-  "message.achievement.completed": "&7Vous have achieved the achievement: &b%achievement%&7, you a earn a bonus of &6+%coins% &7coins.",
-  "line.achievement.bonus": "&8▪ &7Bonus: &6%coins% ⛃",
-  "line.achievement.completed": "&aCompleted",
-  "line.achievement.not-completed": "&cNot completed yet",
-  "gui.achievements.name": "&7Achievements",
-  "gui-item.achievements.name": "&bAchievements",
-  "gui-item.achievements.lore": "&7Achievements can be accomplished during\n&7the game et allows you to gain a\n&7bonus of &6coins &7to purchase your\n&7equipment.",
-  "item.achievements.name": "&aAchievements",
-
   "message.buy-phase.switching": "\n&7Jump phase &acompleted&7! Now, buy stuff with your earned &6coins&7.\n \n",
   "action-bar.buy-phase.time": "&b%seconds% &7second(s) before the &cDeathMatch",
+
+  "player-tracker.action-bar": "&3Tracker &8┃ &b%player% %arrow% &f(%meters%m)",
 
   "gui.shop.name": "&3GetDown &8┃ &7Shop",
 
@@ -101,10 +94,5 @@
   "bonus.slow.name": "Slowed movements",
   "bonus.extra-hearts.name": "Extra hearts",
   "bonus.resistance.name": "Resistance",
-  "bonus.nausea.name": "Nausea",
-
-  "achievement.no-deaths.name": "&bImmortal",
-  "achievement.no-deaths.description": "&7Do not die during the jump\n&7phase.",
-  "achievement.no-damages.name": "&bInvulnerable",
-  "achievement.no-damages.description": "&7Do not take damages during the\n&7jump phase."
+  "bonus.nausea.name": "Nausea"
 }

@@ -1,8 +1,9 @@
-package fr.hyriode.getdown.game.scoreboard;
+package fr.hyriode.getdown.game.ui.scoreboard;
 
 import fr.hyriode.getdown.HyriGetDown;
 import fr.hyriode.getdown.game.GDGamePlayer;
 import fr.hyriode.getdown.language.GDMessage;
+import fr.hyriode.getdown.world.jump.GDJumpWorld;
 import fr.hyriode.hyrame.utils.Symbols;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -21,13 +22,13 @@ public class JumpScoreboard extends GDScoreboard {
         super(player, "gd-jump");
         this.addCurrentDateLine(0);
         this.addBlankLine(1);
-        this.addGameTimeLine(3, GDMessage.SCOREBOARD_TIME.asString(this.player));
-        this.addBlankLine(4);
-        this.addBlankLine(6);
+        this.addGameTimeLine(4, GDMessage.SCOREBOARD_TIME.asString(this.player));
+        this.addBlankLine(5);
+        this.addBlankLine(7);
 
         this.addUpdatableLines();
 
-        this.addBlankLine(13);
+        this.addBlankLine(14);
         this.addHostnameLine();
     }
 
@@ -42,15 +43,17 @@ public class JumpScoreboard extends GDScoreboard {
                 .replace("%map%", this.game.getCurrentWorld().getName())
                 .replace("%index%", String.valueOf(this.game.getWorldIndex() + 1))
                 .replace("%total%", String.valueOf(HyriGetDown.get().getJumpWorlds().size())));
-        this.setLine(5, GDMessage.SCOREBOARD_JUMP_COINS.asString(this.player).replace("%coins%", String.valueOf(this.game.getPlayer(this.player).getCoins())));
-        this.setLine(7, GDMessage.SCOREBOARD_JUMP_TOP.asString(this.player));
+        this.setLine(3, GDMessage.SCOREBOARD_JUMP_DIFFICULTY.asString(this.player)
+                .replace("%difficulty%", ((GDJumpWorld) this.game.getCurrentWorld()).getDifficulty().getDisplayName().getValue(this.player)));
+        this.setLine(6, GDMessage.SCOREBOARD_JUMP_COINS.asString(this.player).replace("%coins%", String.valueOf(this.game.getPlayer(this.player).getCoins())));
+        this.setLine(8, GDMessage.SCOREBOARD_JUMP_TOP.asString(this.player));
 
         final List<GDGamePlayer> bestPlayers = this.game.getPlayers().stream().sorted(Comparator.comparingInt(GDGamePlayer::getYPosition)).collect(Collectors.toList());
 
         for (int i = 0; i < 5; i++) {
             final GDGamePlayer gamePlayer = bestPlayers.size() > i ? bestPlayers.get(i) : null;
 
-            this.setLine(8 + i, Symbols.HYPHEN_BULLET + " " + (
+            this.setLine(9 + i, Symbols.HYPHEN_BULLET + " " + (
                     gamePlayer == null || !gamePlayer.isOnline() ?
                             ChatColor.values()[i] + "" + ChatColor.RESET + ChatColor.GRAY + "**********" :
                             gamePlayer.formatNameWithTeam() + (gamePlayer.getUniqueId().equals(this.player.getUniqueId()) ?
@@ -59,4 +62,8 @@ public class JumpScoreboard extends GDScoreboard {
         }
     }
 
+    @Override
+    public void hide() {
+        super.hide();
+    }
 }

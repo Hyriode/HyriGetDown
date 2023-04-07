@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class GDNormalCoinsBlock extends GDCoinsBlock {
 
     public GDNormalCoinsBlock() {
-        super(new BlockTexture(Material.SEA_LANTERN), 2.5D, 50);
+        super(new BlockTexture(Material.SEA_LANTERN), 2.5D, 35);
     }
 
     @Override

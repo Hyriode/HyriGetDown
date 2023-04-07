@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class GDMegaCoinsBlock extends GDCoinsBlock {
 
     public GDMegaCoinsBlock() {
-        super(new BlockTexture(Material.DIAMOND_BLOCK), 0.2D, 90);
+        super(new BlockTexture(Material.DIAMOND_BLOCK), 0.2D, 80);
     }
 
     @Override

@@ -4,17 +4,14 @@ import fr.hyriode.api.HyriAPI;
 import fr.hyriode.api.event.HyriEventHandler;
 import fr.hyriode.api.event.HyriEventPriority;
 import fr.hyriode.getdown.HyriGetDown;
-import fr.hyriode.getdown.game.achievement.GDAchievement;
 import fr.hyriode.getdown.game.GDGame;
 import fr.hyriode.getdown.game.GDGamePlayer;
 import fr.hyriode.getdown.game.GDPhase;
-import fr.hyriode.getdown.game.scoreboard.SpectatorScoreboard;
-import fr.hyriode.getdown.language.GDMessage;
+import fr.hyriode.getdown.game.ui.scoreboard.SpectatorScoreboard;
 import fr.hyriode.getdown.shop.item.ShopAccessorItem;
 import fr.hyriode.getdown.world.jump.GDJumpWorld;
 import fr.hyriode.hyrame.game.HyriGameSpectator;
 import fr.hyriode.hyrame.game.HyriGameState;
-import fr.hyriode.hyrame.game.event.player.HyriGameDeathEvent;
 import fr.hyriode.hyrame.game.event.player.HyriGameReconnectEvent;
 import fr.hyriode.hyrame.game.event.player.HyriGameReconnectedEvent;
 import fr.hyriode.hyrame.game.event.player.HyriGameSpectatorEvent;
@@ -78,14 +75,12 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
         final GDGame game = HyriGetDown.get().getGame();
         final HyriGameSpectator spectator = event.getSpectator();
 
-        if (spectator instanceof GDGamePlayer && game.getState() != HyriGameState.PLAYING) {
-            game.win(game.getWinner());
-        } else {
+        if (!(spectator instanceof GDGamePlayer)) {
             spectator.getPlayer().teleport(game.getWaitingRoom().getConfig().getSpawn().asBukkit());
 
-            if (!(spectator instanceof GDGamePlayer)) {
-                new SpectatorScoreboard(spectator.getPlayer()).show();
-            }
+            new SpectatorScoreboard(spectator.getPlayer()).show();
+        } else if (game.getState() == HyriGameState.PLAYING) {
+            game.win(game.getWinner());
         }
     }
 
@@ -167,14 +162,11 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
 
         final double damage = event.getFinalDamage();
 
-        gamePlayer.getAchievements().remove((Integer) GDAchievement.NO_DAMAGES.getId());
-
         if (player.getHealth() - damage <= 0.0D) {
             if (!event.isCancelled()) {
                 event.setDamage(0.0D);
                 event.setCancelled(true);
 
-                gamePlayer.getAchievements().remove((Integer) GDAchievement.NO_DEATHS.getId());
                 gamePlayer.onJumpDeath();
             }
         }
@@ -258,11 +250,17 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
         }
 
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-            final Location location = player.getLocation();
+            final Player newPlayer = Bukkit.getPlayer(player.getUniqueId());
+
+            if (newPlayer == null) {
+                return;
+            }
+
+            final Location location = newPlayer.getLocation();
             final Block block = location.getBlock().getRelative(BlockFace.DOWN);
 
-            world.checkBlock(block, player);
-        }, 10L);
+            world.checkBlock(block, newPlayer);
+        }, 2 * 20L);
     }
 
 }

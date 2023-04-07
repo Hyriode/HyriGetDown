@@ -5,13 +5,14 @@ import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.api.leaderboard.IHyriLeaderboardProvider;
 import fr.hyriode.api.leveling.NetworkLeveling;
 import fr.hyriode.api.player.IHyriPlayer;
-import fr.hyriode.api.player.IHyriPlayerSession;
 import fr.hyriode.getdown.HyriGetDown;
 import fr.hyriode.getdown.api.GDData;
 import fr.hyriode.getdown.api.GDStatistics;
-import fr.hyriode.getdown.game.achievement.AchievementsItem;
-import fr.hyriode.getdown.game.achievement.GDAchievement;
-import fr.hyriode.getdown.game.scoreboard.*;
+import fr.hyriode.getdown.game.ui.PlayerTracker;
+import fr.hyriode.getdown.game.ui.scoreboard.BuyScoreboard;
+import fr.hyriode.getdown.game.ui.scoreboard.DeathMatchScoreboard;
+import fr.hyriode.getdown.game.ui.scoreboard.JumpScoreboard;
+import fr.hyriode.getdown.game.ui.scoreboard.SpectatorScoreboard;
 import fr.hyriode.getdown.language.GDMessage;
 import fr.hyriode.getdown.world.GDWorld;
 import fr.hyriode.getdown.world.jump.GDJumpWorld;
@@ -50,6 +51,8 @@ import java.util.stream.Collectors;
  * on 23/07/2022 at 11:34
  */
 public class GDGame extends HyriGame<GDGamePlayer> {
+
+    private boolean winning = false;
 
     private GDPhase currentPhase;
 
@@ -105,8 +108,6 @@ public class GDGame extends HyriGame<GDGamePlayer> {
         team.addPlayer(gamePlayer);
         gamePlayer.setData(data);
         gamePlayer.setStatistics(statistics);
-
-        this.hyrame.getItemManager().giveItem(gamePlayer.getPlayer(), 4, AchievementsItem.class);
     }
 
     @Override
@@ -164,10 +165,11 @@ public class GDGame extends HyriGame<GDGamePlayer> {
 
     @Override
     public void win(HyriGameTeam winner) {
-        if (winner == null) {
+        if (winner == null || this.winning) {
             return;
         }
 
+        this.winning = true;
         this.currentPhase = null;
 
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -304,23 +306,6 @@ public class GDGame extends HyriGame<GDGamePlayer> {
             final Player player = gamePlayer.getPlayer();
 
             player.sendMessage(GDMessage.MESSAGE_BUY_PHASE_NAME.asLang().getValue(player.getUniqueId()));
-
-            for (Integer achievementId : gamePlayer.getAchievements()) {
-                final GDAchievement achievement = GDAchievement.getById(achievementId);
-
-                if (achievement == null) {
-                    continue;
-                }
-
-                final int coins = achievement.getCoins();
-
-                player.sendMessage(GDMessage.MESSAGE_ACHIEVEMENT_COMPLETED.asString(player).
-                        replace("%achievement%", achievement.getDisplay(player)
-                        .replace("%coins%", String.valueOf(coins))));
-
-                gamePlayer.addCoins(coins);
-                gamePlayer.getData().addCompletedAchievement(achievement);
-            }
         });
 
         for (GDGamePlayer gamePlayer : this.players) {
@@ -329,7 +314,7 @@ public class GDGame extends HyriGame<GDGamePlayer> {
 
         new BukkitRunnable() {
 
-            private int index = 90;
+            private int index = 100;
 
             @Override
             public void run() {
@@ -395,8 +380,10 @@ public class GDGame extends HyriGame<GDGamePlayer> {
 
         for (GDGamePlayer gamePlayer : this.players) {
             if (!gamePlayer.isOnline()) {
-                return;
+                continue;
             }
+
+            new PlayerTracker(gamePlayer).runTaskTimer(this.plugin, 0, 5L);
 
             gamePlayer.onDeathMatchStart();
         }

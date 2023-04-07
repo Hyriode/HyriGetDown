@@ -1,8 +1,7 @@
-package fr.hyriode.getdown.game.scoreboard;
+package fr.hyriode.getdown.game.ui.scoreboard;
 
 import fr.hyriode.getdown.HyriGetDown;
 import fr.hyriode.getdown.game.GDGame;
-import fr.hyriode.getdown.game.GDGamePlayer;
 import fr.hyriode.getdown.language.GDMessage;
 import fr.hyriode.getdown.world.GDWorld;
 import fr.hyriode.hyrame.utils.Symbols;

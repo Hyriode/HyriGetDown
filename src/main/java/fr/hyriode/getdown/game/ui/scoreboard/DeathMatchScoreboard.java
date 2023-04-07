@@ -1,9 +1,7 @@
-package fr.hyriode.getdown.game.scoreboard;
+package fr.hyriode.getdown.game.ui.scoreboard;
 
 import fr.hyriode.getdown.game.GDGamePlayer;
 import fr.hyriode.getdown.language.GDMessage;
-import fr.hyriode.hyrame.utils.Symbols;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
@@ -36,6 +34,11 @@ public class DeathMatchScoreboard extends GDScoreboard {
     private void addUpdatableLines() {
         this.setLine(2, GDMessage.SCOREBOARD_DEATH_MATCH_KILLS.asString(this.player).replace("%kills%", String.valueOf(this.gamePlayer.getKills())));
         this.setLine(4, GDMessage.SCOREBOARD_DEATH_MATCH_PLAYERS.asString(this.player).replace("%players%", String.valueOf(this.game.getAlivePlayers().size())));
+    }
+
+    @Override
+    public void hide() {
+        super.hide();
     }
 
 }

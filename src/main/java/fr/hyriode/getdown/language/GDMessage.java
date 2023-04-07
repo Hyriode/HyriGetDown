@@ -20,6 +20,7 @@ public enum GDMessage {
     SCOREBOARD_TIME("scoreboard.time"),
 
     SCOREBOARD_JUMP_MAP("scoreboard.jump.map"),
+    SCOREBOARD_JUMP_DIFFICULTY("scoreboard.jump.difficulty"),
     SCOREBOARD_JUMP_COINS("scoreboard.jump.coins"),
     SCOREBOARD_JUMP_TOP("scoreboard.jump.top"),
     SCOREBOARD_JUMP_YOU("scoreboard.jump.you"),
@@ -38,13 +39,6 @@ public enum GDMessage {
     MESSAGE_JUMP_END("message.jump.end"),
 
     MESSAGE_ELIMINATED("message.eliminated"),
-
-    MESSAGE_ACHIEVEMENT_COMPLETED("message.achievement.completed"),
-    LINE_ACHIEVEMENT_BONUS("line.achievement.bonus"),
-    LINE_ACHIEVEMENT_COMPLETED("line.achievement.completed"),
-    LINE_ACHIEVEMENT_NOT_COMPLETED("line.achievement.not-completed"),
-    GUI_ITEM_ACHIEVEMENTS_NAME("gui-item.achievements.name"),
-    GUI_ITEM_ACHIEVEMENTS_LORE("gui-item.achievements.lore"),
 
     MESSAGE_BUY_PHASE_NAME("message.buy-phase.switching"),
     ACTION_BAR_BUY_PHASE_TIME("action-bar.buy-phase.time"),
@@ -67,9 +61,9 @@ public enum GDMessage {
     MESSAGE_SHOP_NOT_ENOUGH_COINS("message.shop.not-enough-coins"),
     MESSAGE_SHOP_NOT_ENOUGH_SPACE("message.shop.not-enough-space"),
 
-    BONUS_ACTION_BAR("bonus.action-bar.display")
+    BONUS_ACTION_BAR("bonus.action-bar.display"),
 
-    ;
+    PLAYER_TRACKER_BAR("player-tracker.action-bar");
 
     private HyriLanguageMessage languageMessage;
 

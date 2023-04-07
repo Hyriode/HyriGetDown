@@ -1,4 +1,4 @@
-package fr.hyriode.getdown.game.scoreboard;
+package fr.hyriode.getdown.game.ui.scoreboard;
 
 import fr.hyriode.getdown.HyriGetDown;
 import fr.hyriode.getdown.game.GDGame;

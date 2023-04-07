@@ -1,4 +1,4 @@
-package fr.hyriode.getdown.game.scoreboard;
+package fr.hyriode.getdown.game.ui.scoreboard;
 
 import fr.hyriode.getdown.language.GDMessage;
 import org.bukkit.entity.Player;
@@ -30,6 +30,11 @@ public class BuyScoreboard extends GDScoreboard {
 
     private void addUpdatableLines() {
         this.setLine(4, GDMessage.SCOREBOARD_JUMP_COINS.asString(this.player).replace("%coins%", String.valueOf(this.game.getPlayer(this.player).getCoins())));
+    }
+
+    @Override
+    public void hide() {
+        super.hide();
     }
 
 }

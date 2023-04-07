@@ -4,11 +4,9 @@ import fr.hyriode.api.player.IHyriPlayerSession;
 import fr.hyriode.getdown.HyriGetDown;
 import fr.hyriode.getdown.api.GDData;
 import fr.hyriode.getdown.api.GDStatistics;
-import fr.hyriode.getdown.game.achievement.GDAchievement;
-import fr.hyriode.getdown.game.scoreboard.*;
+import fr.hyriode.getdown.game.ui.scoreboard.*;
 import fr.hyriode.getdown.language.GDMessage;
 import fr.hyriode.getdown.shop.item.ShopAccessorItem;
-import fr.hyriode.getdown.world.GDWorld;
 import fr.hyriode.getdown.world.jump.GDJumpWorld;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
@@ -23,11 +21,8 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * Created by AstFaster
@@ -45,12 +40,10 @@ public class GDGamePlayer extends HyriGamePlayer {
     private int deathmatchDeaths;
 
     private final GDGame game;
-    private final List<Integer> achievements;
 
     public GDGamePlayer(Player player) {
         super(player);
         this.game = HyriGetDown.get().getGame();
-        this.achievements = Arrays.stream(GDAchievement.values()).map(GDAchievement::getId).collect(Collectors.toList());
     }
 
     public void onJumpsStart() {
@@ -94,7 +87,7 @@ public class GDGamePlayer extends HyriGamePlayer {
 
             if (hitter != null) {
                 final GDGamePlayer hitterGamePlayer = hitter.asGamePlayer().cast();
-                final int killCoins = (int) (this.coins * 0.05);
+                final int killCoins = (int) (this.coins * 0.04);
 
                 if (hitterGamePlayer.isOnline()) {
                     Title.sendTitle(hitterGamePlayer.getPlayer(), ChatColor.GREEN + "+ " + killCoins + " Coins", "", 5, 40, 5);
@@ -238,10 +231,6 @@ public class GDGamePlayer extends HyriGamePlayer {
     @Override
     public String formatNameWithTeam() {
         return this.isOnline() ? IHyriPlayerSession.get(this.uniqueId).getNameWithRank() : this.asHyriPlayer().getNameWithRank();
-    }
-
-    public List<Integer> getAchievements() {
-        return this.achievements;
     }
 
 }

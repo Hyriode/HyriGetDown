@@ -41,7 +41,6 @@ public class GDWaitingRoom extends HyriWaitingRoom {
         final NPCCategory normal = new NPCCategory(HyriLanguageMessage.from(gameType.getDisplayName()));
 
         normal.addData(new NPCData(LANG_DATA.apply("kills"), account -> String.valueOf(this.getStatistics(gameType, account).getKills())));
-        normal.addData(new NPCData(LANG_DATA.apply("final-kills"), account -> String.valueOf(this.getStatistics(gameType, account).getFinalKills())));
         normal.addData(new NPCData(LANG_DATA.apply("jump-deaths"), account -> String.valueOf(this.getStatistics(gameType, account).getJumpDeaths())));
         normal.addData(new NPCData(LANG_DATA.apply("deathmatch-deaths"), account -> String.valueOf(this.getStatistics(gameType, account).getDeathmatchDeaths())));
         normal.addData(new NPCData(LANG_DATA.apply("successful-jumps"), account -> String.valueOf(this.getStatistics(gameType, account).getSuccessfulJumps())));
