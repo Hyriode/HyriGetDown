@@ -19,6 +19,7 @@
   "message.game.end.1": "§e1st",
   "message.game.end.2": "§62nd",
   "message.game.end.3": "§c3th",
+  "message.game.end.nobody": "&7Nobody",
 
   "scoreboard.time": "Time: ",
 
