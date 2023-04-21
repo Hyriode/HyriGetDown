@@ -71,6 +71,7 @@ public class GDGame extends HyriGame<GDGamePlayer> {
                 HyriAPI.get().getConfig().isDevEnvironment() ? GDGameType.NORMAL : HyriGameType.getFromData(GDGameType.values()));
         this.waitingRoom = new GDWaitingRoom(this);
         this.usingGameTabList = false;
+        this.usingTeams = false;
         this.scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
         this.reconnectionTime = 120;
         this.description = GDMessage.GAME_DESCRIPTION.asLang();

@@ -79,7 +79,7 @@ public class GDGamePlayer extends HyriGamePlayer {
 
     public void onJumpDeath() {
         final GDJumpWorld jumpWorld = (GDJumpWorld) this.game.getCurrentWorld();
-        final int removedCoins = 20 * (1 + (this.coins / 1000));
+        final int removedCoins = 20 * (1 + (this.coins / 800));
         final List<HyriLastHitterProtocol.LastHitter> lastHitters = this.game.getProtocolManager().getProtocol(HyriLastHitterProtocol.class).getLastHitters(this.player);
 
         if (lastHitters != null) {

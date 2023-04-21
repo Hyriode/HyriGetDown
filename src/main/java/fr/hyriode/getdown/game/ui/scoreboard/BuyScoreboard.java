@@ -32,9 +32,4 @@ public class BuyScoreboard extends GDScoreboard {
         this.setLine(4, GDMessage.SCOREBOARD_JUMP_COINS.asString(this.player).replace("%coins%", String.valueOf(this.game.getPlayer(this.player).getCoins())));
     }
 
-    @Override
-    public void hide() {
-        super.hide();
-    }
-
 }
