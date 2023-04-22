@@ -10,9 +10,7 @@ import fr.hyriode.hyrame.tablist.ITabListManager;
 import fr.hyriode.hyrame.utils.block.Cuboid;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -73,28 +71,7 @@ public enum GDBonus {
         @Override
         public void accept(Player player) {
             addDurationBar(GDBonus.FIRE.getDisplayName(), player, DURATION);
-
-            new BukkitRunnable() {
-
-                private int seconds = DURATION;
-
-                @Override
-                public void run() {
-                    final Block block = player.getLocation().getBlock();
-
-                    if (block.getRelative(BlockFace.DOWN).getType() != Material.AIR) {
-                        block.setType(Material.FIRE);
-                    }
-
-                    if (this.seconds == 0) {
-                        this.cancel();
-                        return;
-                    }
-
-                    this.seconds--;
-                }
-
-            }.runTaskTimer(HyriGetDown.get(), 0L, 20L);
+            player.setFireTicks(DURATION * 20);
         }
     }, true),
 

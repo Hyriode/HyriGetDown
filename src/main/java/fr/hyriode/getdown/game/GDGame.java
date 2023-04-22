@@ -97,16 +97,7 @@ public class GDGame extends HyriGame<GDGamePlayer> {
         final GDGamePlayer gamePlayer = this.getPlayer(player);
         final GDData data = GDData.get(player.getUniqueId());
         final GDStatistics statistics = GDStatistics.get(player.getUniqueId());
-        final HyriGameTeam team = new HyriGameTeam(player.getName(), null, null, 1){
-            @Override
-            public String getFormattedDisplayName(Player target) {
-                return gamePlayer.formatNameWithTeam();
-            }
-        };
 
-        this.registerTeam(team);
-
-        team.addPlayer(gamePlayer);
         gamePlayer.setData(data);
         gamePlayer.setStatistics(statistics);
     }
