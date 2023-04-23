@@ -8,7 +8,7 @@ import fr.hyriode.hyrame.game.HyriGameType;
  */
 public enum GDGameType implements HyriGameType {
 
-    NORMAL("Normal", 8, 12)
+    NORMAL("Normal", 6, 12)
     ;
 
     private final String displayName;

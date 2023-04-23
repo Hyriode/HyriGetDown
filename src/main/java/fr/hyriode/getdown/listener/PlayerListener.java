@@ -249,18 +249,16 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
             return;
         }
 
-        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-            final Player newPlayer = Bukkit.getPlayer(player.getUniqueId());
+        final Player newPlayer = Bukkit.getPlayer(player.getUniqueId());
 
-            if (newPlayer == null) {
-                return;
-            }
+        if (newPlayer == null) {
+            return;
+        }
 
-            final Location location = newPlayer.getLocation();
-            final Block block = location.getBlock().getRelative(BlockFace.DOWN);
+        final Location location = newPlayer.getLocation();
+        final Block block = location.getBlock().getRelative(BlockFace.DOWN);
 
-            world.checkBlock(block, newPlayer);
-        }, 2 * 20L);
+        world.checkBlock(block, newPlayer);
     }
 
 }
