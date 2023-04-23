@@ -2,6 +2,7 @@ package fr.hyriode.getdown.language;
 
 import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.api.player.IHyriPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -68,9 +69,9 @@ public enum GDMessage {
     private HyriLanguageMessage languageMessage;
 
     private final String key;
-    private final BiFunction<IHyriPlayer, String, String> formatter;
+    private final BiFunction<Player, String, String> formatter;
 
-    GDMessage(String key, BiFunction<IHyriPlayer, String, String> formatter) {
+    GDMessage(String key, BiFunction<Player, String, String> formatter) {
         this.key = key;
         this.formatter = formatter;
     }
@@ -89,15 +90,11 @@ public enum GDMessage {
     }
 
     public String asString(IHyriPlayer account) {
-        return this.formatter.apply(account, this.asLang().getValue(account));
+        return this.formatter.apply(Bukkit.getPlayer(account.getUniqueId()), this.asLang().getValue(account));
     }
 
     public String asString(Player player) {
-        return this.asString(IHyriPlayer.get(player.getUniqueId()));
-    }
-
-    public void sendTo(Player player) {
-        player.sendMessage(this.asString(player));
+        return this.formatter.apply(player, this.asLang().getValue(player));
     }
 
     public List<String> asList(IHyriPlayer account) {
@@ -105,7 +102,7 @@ public enum GDMessage {
     }
 
     public List<String> asList(Player player) {
-        return this.asList(IHyriPlayer.get(player.getUniqueId()));
+        return new ArrayList<>(Arrays.asList(this.asString(player).split("\n")));
     }
 
 }
