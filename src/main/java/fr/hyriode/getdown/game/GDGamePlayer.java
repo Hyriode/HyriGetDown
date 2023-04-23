@@ -30,6 +30,8 @@ import java.util.function.Consumer;
  */
 public class GDGamePlayer extends HyriGamePlayer {
 
+    private String formattedName;
+
     private GDData data;
     private GDStatistics statistics;
 
@@ -44,6 +46,7 @@ public class GDGamePlayer extends HyriGamePlayer {
     public GDGamePlayer(Player player) {
         super(player);
         this.game = HyriGetDown.get().getGame();
+        this.formattedName = IHyriPlayerSession.get(this.uniqueId).getNameWithRank();
     }
 
     public void onJumpsStart() {
@@ -230,7 +233,7 @@ public class GDGamePlayer extends HyriGamePlayer {
 
     @Override
     public String formatNameWithTeam() {
-        return this.isOnline() ? IHyriPlayerSession.get(this.uniqueId).getNameWithRank() : this.asHyriPlayer().getNameWithRank();
+        return this.formattedName;
     }
 
 }

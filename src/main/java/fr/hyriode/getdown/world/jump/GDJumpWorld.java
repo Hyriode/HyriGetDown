@@ -184,7 +184,7 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
 
             target.playSound(location, Sound.FIREWORK_TWINKLE, 1.0F, 1.3F);
             target.playSound(location, Sound.LEVEL_UP, 1.0F, 1.0F);
-            target.sendMessage(GDMessage.MESSAGE_JUMP_END.asString(target).replace("%player%", gamePlayer.asHyriPlayer().getNameWithRank()));
+            target.sendMessage(GDMessage.MESSAGE_JUMP_END.asString(target).replace("%player%", gamePlayer.formatNameWithTeam()));
         });
 
         new BukkitRunnable() {
@@ -198,9 +198,7 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
 
                     switchingMap = true;
 
-                    final String playerName = gamePlayer.asHyriPlayer().getNameWithRank();
-
-                    players.accept(target -> Title.sendTitle(target, GDMessage.TITLE_JUMP_END.asString(target), playerName, 15, 60, 15));
+                    players.accept(target -> Title.sendTitle(target, GDMessage.TITLE_JUMP_END.asString(target), gamePlayer.formatNameWithTeam(), 15, 60, 15));
 
                     if (game.getNextWorld().getType() == Type.DEATH_MATCH) {
                         game.switchToBuyPhase();
