@@ -51,6 +51,7 @@ public class GDGamePlayer extends HyriGamePlayer {
 
     public void onJumpsStart() {
         new JumpScoreboard(this.player).show();
+        this.player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
     }
 
     public void onBuyStart() {
@@ -61,6 +62,7 @@ public class GDGamePlayer extends HyriGamePlayer {
         new BuyScoreboard(this.player).show();
 
         IHyrame.get().getItemManager().giveItem(this.player, 4, ShopAccessorItem.class);
+        this.player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
     }
 
     public void onDeathMatchStart() {
@@ -69,6 +71,7 @@ public class GDGamePlayer extends HyriGamePlayer {
         }
 
         new DeathMatchScoreboard(this.player).show();
+        this.player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
     }
 
     public void onReconnect() {
