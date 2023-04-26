@@ -44,6 +44,6 @@ public class LevelItem extends ShopItem {
 
         gamePlayer.removeCoins(this.price);
 
-        player.giveExp(ExperienceUtil.getExpToLevel(this.level));
+        player.giveExp(ExperienceUtil.getExpToLevel(this.level) + 1);
     }
 }

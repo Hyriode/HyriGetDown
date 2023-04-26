@@ -133,6 +133,11 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
 
     @Override
     public void teleportPlayers() {
+        final World world = this.asBukkit();
+        final Location spawn = this.config.getSpawn().asBukkit(world);
+
+        spawn.getChunk().load(false);
+
         for (HyriGamePlayer gamePlayer : HyriGetDown.get().getGame().getPlayers()) {
             if (!gamePlayer.isOnline()) {
                 continue;
@@ -143,7 +148,7 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
             PlayerUtil.resetPlayer(player);
 
             player.setFallDistance(0.0F);
-            player.teleport(this.config.getSpawn().asBukkit(this.asBukkit()));
+            player.teleport(spawn);
         }
     }
 
