@@ -32,6 +32,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -60,6 +61,13 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
 
         if (game.getState() != HyriGameState.PLAYING || game.getCurrentPhase() != GDPhase.JUMP) {
             event.disallow();
+        }
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        if (event.getClickedBlock() != null) {
+            event.setCancelled(true);
         }
     }
 
@@ -125,7 +133,7 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
         event.setCancelled(true);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onDamage(EntityDamageEvent event) {
         final Entity entity = event.getEntity();
         final GDGame game = HyriGetDown.get().getGame();
