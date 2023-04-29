@@ -133,20 +133,17 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
         event.setCancelled(true);
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler
     public void onDamage(EntityDamageEvent event) {
         final Entity entity = event.getEntity();
         final GDGame game = HyriGetDown.get().getGame();
         final GDPhase phase = game.getCurrentPhase();
 
+
         if (phase == null) {
             return;
         }
 
-        if (phase == GDPhase.BUY) {
-            event.setCancelled(true);
-            return;
-        }
 
         if (!(entity instanceof Player) || phase == GDPhase.DEATHMATCH) {
             return;
@@ -156,6 +153,11 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
         final GDGamePlayer gamePlayer = game.getPlayer(player);
 
         if (gamePlayer == null) {
+            return;
+        }
+
+        if (phase == GDPhase.BUY) {
+            event.setCancelled(true);
             return;
         }
 
