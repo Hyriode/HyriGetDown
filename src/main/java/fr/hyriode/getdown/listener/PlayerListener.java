@@ -183,7 +183,7 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onDamageByEntity(EntityDamageByEntityEvent event) {
         final Entity entity = event.getEntity();
         final Entity dealerEntity = event.getDamager();
