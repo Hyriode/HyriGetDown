@@ -285,10 +285,10 @@ public class GDGame extends HyriGame<GDGamePlayer> {
             player.teleport(HyriGetDown.get().getConfiguration().getWaitingRoom().getSpawn().asBukkit());
         }
 
-        this.scoreboardsTask.cancel();
-
         IHyrame.get().getScoreboardManager().getScoreboards(SpectatorScoreboard.class).forEach(SpectatorScoreboard::update);
         IHyrame.get().getScoreboardManager().getScoreboards(JumpScoreboard.class).forEach(JumpScoreboard::hide);
+
+        this.scoreboardsTask.cancel();
 
         this.getPlayers().forEach(gamePlayer -> {
             if (!gamePlayer.isOnline()) {

@@ -13,7 +13,9 @@ import fr.hyriode.getdown.world.jump.block.coins.GDMegaCoinsBlock;
 import fr.hyriode.getdown.world.jump.block.coins.GDNormalCoinsBlock;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
 import fr.hyriode.hyrame.title.Title;
+import fr.hyriode.hyrame.utils.LocationWrapper;
 import fr.hyriode.hyrame.utils.PlayerUtil;
+import fr.hyriode.hyrame.utils.WorldUtil;
 import fr.hyriode.hyrame.utils.block.Cuboid;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -58,6 +60,13 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
     @Override
     public void load() {
         super.load();
+
+        // Load chunks
+        for (Chunk chunk : WorldUtil.getChunksAround(this.config.getSpawn().asBukkit(this.asBukkit()).getChunk(), Bukkit.getViewDistance())) {
+            if (!chunk.isLoaded()) {
+                chunk.load(false);
+            }
+        }
 
         // Generate blocks
         final List<BlockTexture> blocks = this.config.getBlocks();
@@ -135,8 +144,6 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
     public void teleportPlayers() {
         final World world = this.asBukkit();
         final Location spawn = this.config.getSpawn().asBukkit(world);
-
-        spawn.getChunk().load(false);
 
         for (HyriGamePlayer gamePlayer : HyriGetDown.get().getGame().getPlayers()) {
             if (!gamePlayer.isOnline()) {

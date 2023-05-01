@@ -4,6 +4,9 @@ import fr.hyriode.getdown.HyriGetDown;
 import fr.hyriode.getdown.game.GDGamePlayer;
 import fr.hyriode.getdown.world.GDWorld;
 import fr.hyriode.hyrame.utils.LocationWrapper;
+import fr.hyriode.hyrame.utils.WorldUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayDeque;
@@ -32,6 +35,20 @@ public class GDDeathMatchWorld extends GDWorld<GDDeathMatchConfig> {
         Collections.shuffle(spawns);
 
         this.spawns.addAll(spawns);
+    }
+
+    @Override
+    public void load() {
+        super.load();
+
+        // Load chunks
+        for (LocationWrapper spawn : this.spawns) {
+            for (Chunk chunk : WorldUtil.getChunksAround(spawn.asBukkit(this.asBukkit()).getChunk(), Bukkit.getViewDistance())) {
+                if (!chunk.isLoaded()) {
+                    chunk.load(false);
+                }
+            }
+        }
     }
 
     @Override
