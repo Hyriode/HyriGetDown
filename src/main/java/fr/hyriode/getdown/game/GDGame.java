@@ -114,7 +114,7 @@ public class GDGame extends HyriGame<GDGamePlayer> {
             statisticsData.addGamesPlayed(1);
             statisticsData.addKills(gamePlayer.getKills());
             statisticsData.addJumpDeaths(gamePlayer.getJumpDeaths());
-            statisticsData.addEarnedCoins(gamePlayer.getCoins());
+            statisticsData.addEarnedCoins(gamePlayer.getEarnedCoins());
             statisticsData.addDeathmatchDeaths(gamePlayer.getDeathmatchDeaths());
             statisticsData.addSuccessfulJumps(gamePlayer.getSuccessfulJumps());
         } else {

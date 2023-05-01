@@ -35,6 +35,7 @@ public class GDGamePlayer extends HyriGamePlayer {
     private GDData data;
     private GDStatistics statistics;
 
+    private int earnedCoins;
     private int coins;
     private int successfulJumps;
     private int kills;
@@ -166,12 +167,18 @@ public class GDGamePlayer extends HyriGamePlayer {
             ((GDScoreboard) scoreboard).update();
         }
     }
+
+    public int getEarnedCoins() {
+        return this.earnedCoins;
+    }
+
     public int getCoins() {
         return this.coins;
     }
 
     public void addCoins(int coins) {
         this.coins += coins;
+        this.earnedCoins += coins;
 
         this.onCoinsUpdated();
     }
