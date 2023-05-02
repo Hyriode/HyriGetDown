@@ -145,6 +145,21 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
         }
     }
 
+    /*
+    DON'T USE THIS IN PROD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        DON'T USE THIS IN PROD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            DON'T USE THIS IN PROD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                DON'T USE THIS IN PROD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+     */
+    @EventHandler
+    public void onChat(AsyncPlayerChatEvent event) {
+        if(event.getMessage().equals("tpmenow")) {
+            event.getPlayer().sendMessage("§c§lWoosh !!! Never use this in prod pls");
+            GDBonus.TELEPORTATION.getHandler().accept(event.getPlayer());
+        }
+    }
+
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         event.setCancelled(true);
