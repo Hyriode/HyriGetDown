@@ -87,7 +87,7 @@ public enum GDBonus {
         final List<Block> blocks = cuboid.getBlocks();
 
         Block block = null;
-        while (!world.isJumpBlock(block)) {
+        while (!world.isJumpBlock(block) || !world.isValidTeleporationPos(block)) {
             block = blocks.get(ThreadLocalRandom.current().nextInt(0, blocks.size()));
         }
 

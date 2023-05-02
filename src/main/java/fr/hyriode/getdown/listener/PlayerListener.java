@@ -20,6 +20,7 @@ import fr.hyriode.hyrame.item.ItemNBT;
 import fr.hyriode.hyrame.listener.HyriListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -32,6 +33,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -117,6 +119,17 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
             if (new ItemNBT(item).hasTag(ShopAccessorItem.NBT_TAG)) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onPrepareCraft(PrepareItemCraftEvent event) {
+        final GDGame game = HyriGetDown.get().getGame();
+
+        if (game.getCurrentPhase() == GDPhase.BUY) {
+           if(event.getInventory().contains(Material.GOLD_INGOT))  {
+               event.getInventory().setResult(new ItemStack(Material.AIR));
+           }
         }
     }
 
