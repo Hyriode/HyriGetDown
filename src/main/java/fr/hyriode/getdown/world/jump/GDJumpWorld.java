@@ -263,33 +263,6 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
         return values != null && values.size() > 0;
     }
 
-    public boolean isValidTeleporationPos(Block block) {
-        if(block == null) {
-            return false;
-        }
-        Block[] blocks = new Block[]{};
-
-        /*
-        *
-        * Check the blocks around the selected block to check if it is empty,
-        * if this is the case, we check that the two blocks below are also empty,
-        * making it possible to guarantee a passage for the players for 99% of the structures,
-        * special paterns could break this system but they are too specific not to be taken into account
-        * during the build
-        *
-        * */
-        for(BlockFace face : validBlockFaces) {
-            Block blockCheck = block.getRelative(face);
-            if (blockCheck.getType() == Material.AIR) {
-                Block botBlockCheck = blockCheck.getRelative(BlockFace.DOWN);
-                if(botBlockCheck.getType() == Material.AIR && botBlockCheck.getRelative(BlockFace.DOWN).getType()
-                        == Material.AIR) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     public void registerBlock(GDJumpBlock block) {
         this.blocks.add(block);

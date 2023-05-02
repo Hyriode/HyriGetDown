@@ -87,14 +87,14 @@ public enum GDBonus {
         final List<Block> blocks = cuboid.getBlocks();
 
         Block block = null;
-        while (!world.isJumpBlock(block) || !world.isValidTeleporationPos(block)) {
+        while (!world.isJumpBlock(block)) {
             block = blocks.get(ThreadLocalRandom.current().nextInt(0, blocks.size()));
         }
 
         if (block != null) {
             final Location blockLocation = block.getLocation();
 
-            player.teleport(blockLocation.add(blockLocation.getBlockX() > 0 ? 0.5 : -0.5, 0.5, blockLocation.getBlockZ() > 0 ? 0.5 : -0.5));
+            player.teleport(blockLocation.add(blockLocation.getBlockX() > 0 ? 0.5 : -0.5, 1.3, blockLocation.getBlockZ() > 0 ? 0.5 : -0.5));
         }
     }, true),
     INVISIBILITY("invisibility", Rarity.EPIC, player -> {
