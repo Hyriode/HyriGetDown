@@ -10,6 +10,7 @@ import fr.hyriode.getdown.game.GDPhase;
 import fr.hyriode.getdown.game.ui.scoreboard.SpectatorScoreboard;
 import fr.hyriode.getdown.shop.item.ShopAccessorItem;
 import fr.hyriode.getdown.world.jump.GDJumpWorld;
+import fr.hyriode.getdown.world.jump.block.bonus.GDBonus;
 import fr.hyriode.hyrame.game.HyriGameSpectator;
 import fr.hyriode.hyrame.game.HyriGameState;
 import fr.hyriode.hyrame.game.event.player.HyriGameReconnectEvent;
@@ -33,7 +34,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -123,13 +126,13 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
     }
 
     @EventHandler
-    public void onPrepareCraft(PrepareItemCraftEvent event) {
+    public void onMoveInventory(InventoryMoveItemEvent event) {
+
         final GDGame game = HyriGetDown.get().getGame();
 
-        if (game.getCurrentPhase() == GDPhase.BUY) {
-           if(event.getInventory().contains(Material.GOLD_INGOT))  {
-               event.getInventory().setResult(new ItemStack(Material.AIR));
-           }
+        if (game.getCurrentPhase() == GDPhase.BUY
+                && event.getItem().getType() == Material.GOLD_INGOT) {
+            event.setCancelled(true);
         }
     }
 
@@ -139,6 +142,21 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
 
         if (game.getCurrentPhase() != GDPhase.DEATHMATCH) {
             event.setCancelled(true);
+        }
+    }
+
+    /*
+    DON'T USE THIS IN PROD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        DON'T USE THIS IN PROD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            DON'T USE THIS IN PROD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                DON'T USE THIS IN PROD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+     */
+    @EventHandler
+    public void onChat(AsyncPlayerChatEvent event) {
+        if(event.getMessage().equals("tpmenow")) {
+            event.getPlayer().sendMessage("§c§lWoosh !!! Never use this in prod pls");
+            GDBonus.TELEPORTATION.getHandler().accept(event.getPlayer());
         }
     }
 
