@@ -56,6 +56,7 @@ public class GDGame extends HyriGame<GDGamePlayer> {
 
     private GDPhase currentPhase;
 
+    private int timeoutRound = 0;
     private final Scoreboard scoreboard;
     private Objective coinsObjective;
 
@@ -272,6 +273,21 @@ public class GDGame extends HyriGame<GDGamePlayer> {
 
             Title.sendTitle(player, ChatColor.AQUA + this.currentWorld.getName(), world.getDifficulty().getDisplayName().getValue(player), 5, 40, 5);
         }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                /*4 minutes d'attente avant de lancer, puis on relance une minute après pour le changement*/
+                if(timeoutRound == 0) {
+                    timeoutRound++;
+
+                } else if(timeoutRound == 1) {
+                    timeoutRound = 0;
+                    ((GDJumpWorld) HyriGetDown.get().getGame().getCurrentWorld()).onEndReached(null);
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(HyriGetDown.get(), 20*(4*60), 20*(60));
     }
 
     public void switchToBuyPhase() {

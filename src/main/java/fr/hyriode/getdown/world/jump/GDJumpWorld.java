@@ -1,5 +1,6 @@
 package fr.hyriode.getdown.world.jump;
 
+import com.mongodb.lang.Nullable;
 import fr.hyriode.getdown.HyriGetDown;
 import fr.hyriode.getdown.game.GDGame;
 import fr.hyriode.getdown.game.GDGamePlayer;
@@ -168,12 +169,12 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
         }
     }
 
-    public void onEndReached(GDGamePlayer gamePlayer) {
+    public void onEndReached(@Nullable GDGamePlayer gamePlayer) {
         this.ended = true;
-
-        gamePlayer.addSuccessfulJump();
-        gamePlayer.addCoins(this.difficulty.getCoinsReward());
-
+        if(gamePlayer != null) {
+            gamePlayer.addSuccessfulJump();
+            gamePlayer.addCoins(this.difficulty.getCoinsReward());
+        }
         final Consumer<Consumer<Player>> players = consumer -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 consumer.accept(player);
@@ -205,7 +206,12 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
 
             target.playSound(location, Sound.FIREWORK_TWINKLE, 1.0F, 1.3F);
             target.playSound(location, Sound.LEVEL_UP, 1.0F, 1.0F);
-            target.sendMessage(GDMessage.MESSAGE_JUMP_END.asString(target).replace("%player%", gamePlayer.formatNameWithTeam()));
+            if(gamePlayer != null) {
+                target.sendMessage(GDMessage.MESSAGE_JUMP_END.asString(target).replace("%player%", gamePlayer.formatNameWithTeam()));
+            } else {
+                target.sendMessage(GDMessage.MESSAGE_JUMP_TIMEOUT.asString(target));
+            }
+
         });
 
         new BukkitRunnable() {
