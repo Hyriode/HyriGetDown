@@ -43,6 +43,7 @@
   "title.jump.end": "&6First",
   "title.jump.next-map": "&bNext map",
 
+  "message.jump.warning.timeout": "&660 seconds left to finish this round!",
   "message.jump.timeout": "&6No one §7finished the round in time...",
   "message.jump.end": "%player% &7just went &aall the way down&7!",
   "message.jump.death": "%player% &7died pushed by %killer%&7.",

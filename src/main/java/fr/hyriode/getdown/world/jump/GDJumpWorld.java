@@ -169,6 +169,7 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
         }
     }
 
+    //Si gamePlayer est null, on considère que personne n'a eu le temps de finir le round.
     public void onEndReached(@Nullable GDGamePlayer gamePlayer) {
         this.ended = true;
         if(gamePlayer != null) {
