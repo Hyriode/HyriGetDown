@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 public abstract class GDScoreboard extends HyriGameScoreboard<GDGame> {
 
     public GDScoreboard(Player player, String name) {
-        HyriGetDown.get().getGame().
         super(HyriGetDown.get(), HyriGetDown.get().getGame(), player, name);
     }
 
