@@ -1,6 +1,7 @@
 package fr.hyriode.getdown.world.jump;
 
 import com.mongodb.lang.Nullable;
+import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.getdown.HyriGetDown;
 import fr.hyriode.getdown.game.GDGame;
 import fr.hyriode.getdown.game.GDGamePlayer;
@@ -212,7 +213,6 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
             } else {
                 target.sendMessage(GDMessage.MESSAGE_JUMP_TIMEOUT.asString(target));
             }
-
         });
 
         new BukkitRunnable() {
@@ -226,7 +226,7 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
 
                     switchingMap = true;
 
-                    players.accept(target -> Title.sendTitle(target, GDMessage.TITLE_JUMP_END.asString(target), gamePlayer.formatNameWithTeam(), 15, 60, 15));
+                    players.accept(target -> Title.sendTitle(target, GDMessage.TITLE_JUMP_END.asString(target), gamePlayer != null ? gamePlayer.formatNameWithTeam() : HyriLanguageMessage.get("message.game.end.nobody").getValue(target), 15, 60, 15));
 
                     if (game.getNextWorld().getType() == Type.DEATH_MATCH) {
                         game.switchToBuyPhase();
@@ -236,6 +236,10 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
                     return;
                 } else {
                     players.accept(target -> {
+                        if (gamePlayer == null) {
+                            return;
+                        }
+
                         if (target.getUniqueId().equals(gamePlayer.getUniqueId())) {
                             return;
                         }
