@@ -57,6 +57,8 @@ public class GDGame extends HyriGame<GDGamePlayer> {
     private GDPhase currentPhase;
 
     private int timeoutRound = 0;
+    private BukkitRunnable timeoutRunnable;
+
     private final Scoreboard scoreboard;
     private Objective coinsObjective;
 
@@ -274,7 +276,9 @@ public class GDGame extends HyriGame<GDGamePlayer> {
             Title.sendTitle(player, ChatColor.AQUA + this.currentWorld.getName(), world.getDifficulty().getDisplayName().getValue(player), 5, 40, 5);
         }
 
-        new BukkitRunnable() {
+        this.timeoutRound = 0;
+
+        this.timeoutRunnable = new BukkitRunnable() {
             @Override
             public void run() {
                 /*4 minutes d'attente avant de lancer, puis on relance une minute après pour le changement*/
@@ -292,7 +296,9 @@ public class GDGame extends HyriGame<GDGamePlayer> {
                     //On cancel la tâche qui de toute façon sera refaite au changement validé de round.
                 }
             }
-        }.runTaskTimer(HyriGetDown.get(), 20*(4*60), 20*(60));
+        };
+
+        timeoutRunnable.runTaskTimer(HyriGetDown.get(), 20*(4*60), 20*(60));
     }
 
     public void switchToBuyPhase() {
@@ -449,4 +455,7 @@ public class GDGame extends HyriGame<GDGamePlayer> {
         return (GDGameType) super.getType();
     }
 
+    public BukkitRunnable getTimeoutRunnable() {
+        return this.timeoutRunnable;
+    }
 }

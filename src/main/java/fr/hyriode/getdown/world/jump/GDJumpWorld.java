@@ -183,6 +183,8 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
             }
         };
         final GDGame game = HyriGetDown.get().getGame();
+        game.getTimeoutRunnable().cancel();
+
         final Runnable switchMapTimer = () -> new BukkitRunnable() {
 
             private int index = 10;
