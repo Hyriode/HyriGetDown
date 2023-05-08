@@ -93,8 +93,8 @@ public enum GDBonus {
 
         if (block != null) {
             final Location blockLocation = block.getLocation();
-
-            player.teleport(blockLocation.add(blockLocation.getBlockX() > 0 ? 0.5 : -0.5, 0.0, blockLocation.getBlockZ() > 0 ? 0.5 : -0.5));
+            player.teleport(blockLocation.add(0, 1.3, 0));
+           // player.teleport(blockLocation.add(blockLocation.getBlockX() > 0 ? 0.5 : -0.5, 1.3, blockLocation.getBlockZ() > 0 ? 0.5 : -0.5));
         }
     }, true),
     INVISIBILITY("invisibility", Rarity.EPIC, player -> {

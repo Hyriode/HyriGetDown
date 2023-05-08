@@ -39,6 +39,8 @@ public enum GDMessage {
     MESSAGE_JUMP_DEATH("message.jump.death"),
     MESSAGE_JUMP_END("message.jump.end"),
 
+    MESSAGE_JUMP_WARNING_TIMEOUT("message.jump.warning.timeout"),
+    MESSAGE_JUMP_TIMEOUT("message.jump.timeout"),
     MESSAGE_ELIMINATED("message.eliminated"),
 
     MESSAGE_BUY_PHASE_NAME("message.buy-phase.switching"),

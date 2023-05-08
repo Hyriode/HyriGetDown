@@ -1,5 +1,7 @@
 package fr.hyriode.getdown.world.jump;
 
+import com.mongodb.lang.Nullable;
+import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.getdown.HyriGetDown;
 import fr.hyriode.getdown.game.GDGame;
 import fr.hyriode.getdown.game.GDGamePlayer;
@@ -39,6 +41,15 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
     private final GDJumpDifficulty difficulty;
 
     private final List<GDJumpBlock> blocks;
+
+    private final BlockFace[] validBlockFaces = {    BlockFace.NORTH,
+            BlockFace.EAST,
+            BlockFace.SOUTH,
+            BlockFace.WEST,
+            BlockFace.NORTH_EAST,
+            BlockFace.NORTH_WEST,
+            BlockFace.SOUTH_EAST,
+            BlockFace.SOUTH_WEST};
 
     private boolean ended;
     private boolean switchingMap;
@@ -159,18 +170,21 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
         }
     }
 
-    public void onEndReached(GDGamePlayer gamePlayer) {
+    //Si gamePlayer est null, on considère que personne n'a eu le temps de finir le round.
+    public void onEndReached(@Nullable GDGamePlayer gamePlayer) {
         this.ended = true;
-
-        gamePlayer.addSuccessfulJump();
-        gamePlayer.addCoins(this.difficulty.getCoinsReward());
-
+        if(gamePlayer != null) {
+            gamePlayer.addSuccessfulJump();
+            gamePlayer.addCoins(this.difficulty.getCoinsReward());
+        }
         final Consumer<Consumer<Player>> players = consumer -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 consumer.accept(player);
             }
         };
         final GDGame game = HyriGetDown.get().getGame();
+        game.getTimeoutRunnable().cancel();
+
         final Runnable switchMapTimer = () -> new BukkitRunnable() {
 
             private int index = 10;
@@ -196,7 +210,11 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
 
             target.playSound(location, Sound.FIREWORK_TWINKLE, 1.0F, 1.3F);
             target.playSound(location, Sound.LEVEL_UP, 1.0F, 1.0F);
-            target.sendMessage(GDMessage.MESSAGE_JUMP_END.asString(target).replace("%player%", gamePlayer.formatNameWithTeam()));
+            if(gamePlayer != null) {
+                target.sendMessage(GDMessage.MESSAGE_JUMP_END.asString(target).replace("%player%", gamePlayer.formatNameWithTeam()));
+            } else {
+                target.sendMessage(GDMessage.MESSAGE_JUMP_TIMEOUT.asString(target));
+            }
         });
 
         new BukkitRunnable() {
@@ -210,7 +228,7 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
 
                     switchingMap = true;
 
-                    players.accept(target -> Title.sendTitle(target, GDMessage.TITLE_JUMP_END.asString(target), gamePlayer.formatNameWithTeam(), 15, 60, 15));
+                    players.accept(target -> Title.sendTitle(target, GDMessage.TITLE_JUMP_END.asString(target), gamePlayer != null ? gamePlayer.formatNameWithTeam() : HyriLanguageMessage.get("message.game.end.nobody").getValue(target), 15, 60, 15));
 
                     if (game.getNextWorld().getType() == Type.DEATH_MATCH) {
                         game.switchToBuyPhase();
@@ -220,6 +238,10 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
                     return;
                 } else {
                     players.accept(target -> {
+                        if (gamePlayer == null) {
+                            return;
+                        }
+
                         if (target.getUniqueId().equals(gamePlayer.getUniqueId())) {
                             return;
                         }
@@ -253,6 +275,7 @@ public class GDJumpWorld extends GDWorld<GDJumpConfig> {
 
         return values != null && values.size() > 0;
     }
+
 
     public void registerBlock(GDJumpBlock block) {
         this.blocks.add(block);

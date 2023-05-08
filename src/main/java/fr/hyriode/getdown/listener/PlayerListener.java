@@ -10,6 +10,7 @@ import fr.hyriode.getdown.game.GDPhase;
 import fr.hyriode.getdown.game.ui.scoreboard.SpectatorScoreboard;
 import fr.hyriode.getdown.shop.item.ShopAccessorItem;
 import fr.hyriode.getdown.world.jump.GDJumpWorld;
+import fr.hyriode.getdown.world.jump.block.bonus.GDBonus;
 import fr.hyriode.hyrame.game.HyriGameSpectator;
 import fr.hyriode.hyrame.game.HyriGameState;
 import fr.hyriode.hyrame.game.event.player.HyriGameReconnectEvent;
@@ -20,6 +21,7 @@ import fr.hyriode.hyrame.item.ItemNBT;
 import fr.hyriode.hyrame.listener.HyriListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -32,6 +34,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -117,6 +122,17 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
             if (new ItemNBT(item).hasTag(ShopAccessorItem.NBT_TAG)) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onMoveInventory(InventoryMoveItemEvent event) {
+
+        final GDGame game = HyriGetDown.get().getGame();
+
+        if (game.getCurrentPhase() == GDPhase.BUY
+                && event.getItem().getType() == Material.GOLD_INGOT) {
+            event.setCancelled(true);
         }
     }
 
