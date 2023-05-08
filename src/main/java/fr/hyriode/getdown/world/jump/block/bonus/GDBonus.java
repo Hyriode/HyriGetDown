@@ -52,7 +52,7 @@ public enum GDBonus {
 
         class Handler implements Listener {
 
-            @EventHandler(priority = EventPriority.HIGHEST)
+            @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
             public void onDamage(EntityDamageEvent event) {
                 if (!event.getEntity().getUniqueId().equals(player.getUniqueId())) {
                     return;

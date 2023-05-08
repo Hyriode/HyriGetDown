@@ -140,11 +140,9 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
         final GDGame game = HyriGetDown.get().getGame();
         final GDPhase phase = game.getCurrentPhase();
 
-
         if (phase == null) {
             return;
         }
-
 
         if (!(entity instanceof Player) || phase == GDPhase.DEATHMATCH) {
             return;
