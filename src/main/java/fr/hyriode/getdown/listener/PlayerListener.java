@@ -126,12 +126,25 @@ public class PlayerListener extends HyriListener<HyriGetDown> {
     }
 
     @EventHandler
+    public void onPrepareCraft(PrepareItemCraftEvent event) {
+        for(ItemStack item : event.getInventory().getContents()) {
+            if(item == null) {
+                continue;
+            }
+
+            if (new ItemNBT(item).hasTag(ShopAccessorItem.NBT_TAG)) {
+                event.getInventory().setResult(null);
+                break;
+            }
+        }
+    }
+
+    @EventHandler
     public void onMoveInventory(InventoryMoveItemEvent event) {
 
         final GDGame game = HyriGetDown.get().getGame();
 
-        if (game.getCurrentPhase() == GDPhase.BUY
-                && event.getItem().getType() == Material.GOLD_INGOT) {
+        if (new ItemNBT(event.getItem()).hasTag(ShopAccessorItem.NBT_TAG)) {
             event.setCancelled(true);
         }
     }
