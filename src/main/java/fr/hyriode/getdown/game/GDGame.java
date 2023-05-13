@@ -232,7 +232,7 @@ public class GDGame extends HyriGame<GDGamePlayer> {
             // Update leaderboards
             final IHyriLeaderboardProvider provider = HyriAPI.get().getLeaderboardProvider();
 
-            provider.getLeaderboard(NetworkLeveling.LEADERBOARD_TYPE, "rotating-game-experience").incrementScore(playerId, xp);
+            provider.getLeaderboard(NetworkLeveling.LEADERBOARD_TYPE, "getdown-experience").incrementScore(playerId, xp);
             provider.getLeaderboard(HyriGetDown.ID, "kills").incrementScore(playerId, kills);
             provider.getLeaderboard(HyriGetDown.ID, "successful-jumps").incrementScore(playerId, gamePlayer.getSuccessfulJumps());
 
