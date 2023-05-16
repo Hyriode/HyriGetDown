@@ -27,7 +27,7 @@ public class GDWaitingRoom extends HyriWaitingRoom {
         super(game, Material.SEA_LANTERN, HyriGetDown.get().getConfiguration().getWaitingRoom());
         this.clearBlocks = false;
 
-        this.addLeaderboard(new Leaderboard(NetworkLeveling.LEADERBOARD_TYPE, "rotating-game-experience",
+        this.addLeaderboard(new Leaderboard(NetworkLeveling.LEADERBOARD_TYPE, "getdown-experience",
                 player -> HyriLanguageMessage.get("leaderboard.experience.display").getValue(player))
                 .withScopes(HyriLeaderboardScope.DAILY, HyriLeaderboardScope.WEEKLY, HyriLeaderboardScope.MONTHLY));
         this.addLeaderboard(new Leaderboard(HyriGetDown.ID, "kills", player -> HyriLanguageMessage.get("leaderboard.kills.display").getValue(player)));
